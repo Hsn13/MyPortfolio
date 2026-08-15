@@ -138,6 +138,14 @@ export async function POST(req: NextRequest) {
       res = await callGemini(fallbackModel);
     }
 
+    // Google's free tier occasionally returns 503 "high demand" errors that
+    // clear up within a second or two — one quick retry resolves most of them
+    // without the visitor ever noticing.
+    if (res.status === 503) {
+      await new Promise((r) => setTimeout(r, 800));
+      res = await callGemini(primaryModel);
+    }
+
     if (!res.ok) {
       const errText = await res.text();
       console.error("Gemini API error:", res.status, errText);
@@ -148,6 +156,13 @@ export async function POST(req: NextRequest) {
             reply:
               "The AI assistant's model isn't available right now (it may have been renamed or retired by Google). If you're the site owner: check https://ai.google.dev/gemini-api/docs/models for the current free-tier model name and set GEMINI_MODEL accordingly.",
           },
+          { status: 200 }
+        );
+      }
+
+      if (res.status === 503) {
+        return NextResponse.json(
+          { reply: "Google's AI service is under heavy load right now — please try again in a few seconds." },
           { status: 200 }
         );
       }
