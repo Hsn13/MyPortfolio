@@ -122,7 +122,11 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
             contents,
-            generationConfig: { temperature: 0.6, maxOutputTokens: 500 },
+            generationConfig: {
+            temperature: 0.6,
+            maxOutputTokens: 1024,
+            thinkingConfig: { thinkingBudget: 0 },
+          },
           }),
         }
       );
