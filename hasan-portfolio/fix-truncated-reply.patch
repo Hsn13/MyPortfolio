@@ -1,0 +1,17 @@
+diff --git a/hasan-portfolio/app/api/chat/route.ts b/hasan-portfolio/app/api/chat/route.ts
+index 6fe14f5..8a7f88d 100644
+--- a/hasan-portfolio/app/api/chat/route.ts
++++ b/hasan-portfolio/app/api/chat/route.ts
+@@ -122,7 +122,11 @@ export async function POST(req: NextRequest) {
+           body: JSON.stringify({
+             system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+             contents,
+-            generationConfig: { temperature: 0.6, maxOutputTokens: 500 },
++            generationConfig: {
++            temperature: 0.6,
++            maxOutputTokens: 1024,
++            thinkingConfig: { thinkingBudget: 0 },
++          },
+           }),
+         }
+       );
