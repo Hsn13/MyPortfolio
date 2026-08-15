@@ -1,0 +1,382 @@
+diff --git a/hasan-portfolio/app/api/chat/route.ts b/hasan-portfolio/app/api/chat/route.ts
+index c8f3518..1f60d1d 100644
+--- a/hasan-portfolio/app/api/chat/route.ts
++++ b/hasan-portfolio/app/api/chat/route.ts
+@@ -110,8 +110,10 @@ export async function POST(req: NextRequest) {
+       parts: [{ text: m.content }],
+     }));
+ 
++    const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
++
+     const res = await fetch(
+-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
++      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+       {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+@@ -125,7 +127,18 @@ export async function POST(req: NextRequest) {
+ 
+     if (!res.ok) {
+       const errText = await res.text();
+-      console.error("Gemini API error:", errText);
++      console.error("Gemini API error:", res.status, errText);
++
++      if (res.status === 404) {
++        return NextResponse.json(
++          {
++            reply:
++              "The AI assistant's model isn't available right now (it may have been renamed or retired by Google). If you're the site owner: check https://ai.google.dev/gemini-api/docs/models for the current free-tier model name and set GEMINI_MODEL accordingly.",
++          },
++          { status: 200 }
++        );
++      }
++
+       return NextResponse.json(
+         { reply: "I'm having trouble reaching my knowledge base right now — try again in a moment." },
+         { status: 200 }
+diff --git a/hasan-portfolio/components/AIChat.tsx b/hasan-portfolio/components/AIChat.tsx
+index 3f87a1d..d52c4c1 100644
+--- a/hasan-portfolio/components/AIChat.tsx
++++ b/hasan-portfolio/components/AIChat.tsx
+@@ -10,7 +10,7 @@ const STARTERS = [
+   "Would Hasan fit a software engineering role?",
+   "Explain ReWear Bahrain",
+   "What AI projects has Hasan built?",
+-  "Tell me about Hasan&apos;s leadership experience",
++  "Tell me about Hasan's leadership experience",
+ ];
+ 
+ function ChatPanel({ onClose }: { onClose: () => void }) {
+@@ -38,7 +38,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
+       const data = await res.json();
+       setMessages((m) => [...m, { role: "assistant", content: data.reply ?? "Something went wrong — try again." }]);
+     } catch {
+-      setMessages((m) => [...m, { role: "assistant", content: "I couldn&apos;t reach the server. Try again in a moment." }]);
++      setMessages((m) => [...m, { role: "assistant", content: "I couldn't reach the server. Try again in a moment." }]);
+     } finally {
+       setLoading(false);
+     }
+@@ -65,7 +65,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
+       <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+         {messages.length === 0 && (
+           <div className="space-y-2">
+-            <p className="text-sm text-muted">Ask me anything about Hasan&apos;s work, projects, or experience.</p>
++            <p className="text-sm text-muted">Ask me anything about Hasan's work, projects, or experience.</p>
+             <div className="flex flex-col gap-2 pt-2">
+               {STARTERS.map((s) => (
+                 <button
+@@ -133,8 +133,8 @@ export default function AIChat() {
+           <p className="text-xs font-medium uppercase tracking-widest text-muted">Signature feature</p>
+           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ask Hasan AI</h2>
+           <p className="mx-auto mt-4 max-w-xl text-muted">
+-            A live assistant grounded only in Hasan&apos;s real projects, experience, and skills — ask it what a
+-              resume can&apos;t answer.
++            A live assistant grounded only in Hasan's real projects, experience, and skills — ask it what a
++            resume can't answer.
+           </p>
+           <button
+             onClick={() => setOpen(true)}
+diff --git a/hasan-portfolio/components/CaseStudyModal.tsx b/hasan-portfolio/components/CaseStudyModal.tsx
+new file mode 100644
+index 0000000..5531ca5
+--- /dev/null
++++ b/hasan-portfolio/components/CaseStudyModal.tsx
+@@ -0,0 +1,145 @@
++"use client";
++
++import { useEffect } from "react";
++import { motion, AnimatePresence } from "framer-motion";
++import { X } from "lucide-react";
++import { GithubIcon } from "@/components/icons";
++import { ArrowUpRight } from "lucide-react";
++import type { Project } from "@/content/knowledge";
++
++export default function CaseStudyModal({
++  project,
++  onClose,
++}: {
++  project: Project | null;
++  onClose: () => void;
++}) {
++  // Lock body scroll while open, close on Escape.
++  useEffect(() => {
++    if (!project) return;
++    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
++    document.addEventListener("keydown", onKey);
++    document.body.style.overflow = "hidden";
++    return () => {
++      document.removeEventListener("keydown", onKey);
++      document.body.style.overflow = "";
++    };
++  }, [project, onClose]);
++
++  return (
++    <AnimatePresence>
++      {project && (
++        <motion.div
++          initial={{ opacity: 0 }}
++          animate={{ opacity: 1 }}
++          exit={{ opacity: 0 }}
++          transition={{ duration: 0.2 }}
++          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm md:items-center md:p-8"
++          onClick={onClose}
++        >
++          <motion.div
++            initial={{ opacity: 0, y: 16, scale: 0.98 }}
++            animate={{ opacity: 1, y: 0, scale: 1 }}
++            exit={{ opacity: 0, y: 16, scale: 0.98 }}
++            transition={{ duration: 0.2 }}
++            onClick={(e) => e.stopPropagation()}
++            className="relative w-full max-w-3xl rounded-2xl border border-border bg-surface-2 shadow-2xl"
++          >
++            <button
++              onClick={onClose}
++              aria-label="Close case study"
++              className="absolute right-4 top-4 z-10 rounded-full border border-border bg-surface p-2 text-muted hover:text-ink"
++            >
++              <X className="h-4 w-4" />
++            </button>
++
++            <div className="max-h-[85vh] overflow-y-auto p-7 md:p-10">
++              <span className="text-xs font-medium uppercase tracking-widest text-emerald">{project.category}</span>
++              <h3 className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
++              <p className="mt-1 text-sm text-muted">{project.role}</p>
++              <p className="mt-4 text-base leading-relaxed text-ink">{project.heroStatement}</p>
++
++              <div className="mt-6 flex flex-wrap gap-3">
++                {project.links.demo && (
++                  <a
++                    href={project.links.demo}
++                    target="_blank"
++                    rel="noopener noreferrer"
++                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-[#04120d]"
++                  >
++                    Live Demo <ArrowUpRight className="h-3.5 w-3.5" />
++                  </a>
++                )}
++                {project.links.github && (
++                  <a
++                    href={project.links.github}
++                    target="_blank"
++                    rel="noopener noreferrer"
++                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs font-medium text-ink"
++                  >
++                    <GithubIcon className="h-3.5 w-3.5" /> Source
++                  </a>
++                )}
++              </div>
++
++              <div className="mt-8 grid gap-6 md:grid-cols-2">
++                <div>
++                  <h4 className="text-sm font-semibold text-ink">The challenge</h4>
++                  <p className="mt-2 text-sm leading-relaxed text-muted">{project.problem}</p>
++                </div>
++                <div>
++                  <h4 className="text-sm font-semibold text-ink">The solution</h4>
++                  <p className="mt-2 text-sm leading-relaxed text-muted">{project.solution}</p>
++                </div>
++              </div>
++
++              <div className="mt-6">
++                <h4 className="text-sm font-semibold text-ink">My role</h4>
++                <ul className="mt-2 space-y-1.5">
++                  {project.myRole.map((r) => (
++                    <li key={r} className="flex gap-2 text-sm leading-relaxed text-muted">
++                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald" />
++                      {r}
++                    </li>
++                  ))}
++                </ul>
++              </div>
++
++              <div className="mt-6">
++                <h4 className="text-sm font-semibold text-ink">How it was built</h4>
++                <ul className="mt-2 space-y-1.5">
++                  {project.architecture.map((r) => (
++                    <li key={r} className="flex gap-2 text-sm leading-relaxed text-muted">
++                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-blue" />
++                      {r}
++                    </li>
++                  ))}
++                </ul>
++              </div>
++
++              <div className="mt-6 rounded-xl border border-emerald/25 bg-emerald/5 p-4">
++                <h4 className="text-sm font-semibold text-ink">Outcome</h4>
++                <p className="mt-1 text-sm leading-relaxed text-muted">{project.outcome}</p>
++              </div>
++
++              {project.lessons && (
++                <div className="mt-6">
++                  <h4 className="text-sm font-semibold text-ink">Lessons</h4>
++                  <p className="mt-2 text-sm leading-relaxed text-muted">{project.lessons}</p>
++                </div>
++              )}
++
++              <div className="mt-8 flex flex-wrap gap-2 border-t border-border pt-6">
++                {project.tech.map((t) => (
++                  <span key={t} className="rounded-full border border-border px-3 py-1 text-xs text-muted">
++                    {t}
++                  </span>
++                ))}
++              </div>
++            </div>
++          </motion.div>
++        </motion.div>
++      )}
++    </AnimatePresence>
++  );
++}
+diff --git a/hasan-portfolio/components/Projects.tsx b/hasan-portfolio/components/Projects.tsx
+index 8958fa2..de16059 100644
+--- a/hasan-portfolio/components/Projects.tsx
++++ b/hasan-portfolio/components/Projects.tsx
+@@ -1,12 +1,14 @@
+ "use client";
+ 
++import { useState } from "react";
+ import { motion } from "framer-motion";
+ import { ArrowUpRight } from "lucide-react";
+-import { projects, sideProjects } from "@/content/knowledge";
+-import { GithubIcon } from "@/components/icons";
++import { projects, sideProjects, type Project } from "@/content/knowledge";
++import CaseStudyModal from "@/components/CaseStudyModal";
+ 
+ export default function Projects() {
+-  const [flagship, ...rest] = projects.sort((a, b) => a.order - b.order);
++  const [active, setActive] = useState<Project | null>(null);
++  const [flagship, ...rest] = [...projects].sort((a, b) => a.order - b.order);
+ 
+   return (
+     <section id="projects" className="py-24 md:py-32">
+@@ -19,13 +21,14 @@ export default function Projects() {
+         </div>
+ 
+         {/* Flagship — large card */}
+-        <motion.a
+-          href={`#project-${flagship.id}`}
++        <motion.button
++          type="button"
++          onClick={() => setActive(flagship)}
+           initial={{ opacity: 0, y: 16 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={{ duration: 0.6 }}
+-          className="group relative block overflow-hidden rounded-2xl border border-border bg-surface p-8 transition-colors hover:border-emerald/50 md:p-12"
++          className="group relative block w-full overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left transition-colors hover:border-emerald/50 md:p-12"
+         >
+           <span className="text-xs font-medium uppercase tracking-widest text-emerald">{flagship.category}</span>
+           <h3 className="mt-4 font-display text-3xl font-semibold text-ink md:text-4xl">{flagship.name}</h3>
+@@ -41,19 +44,20 @@ export default function Projects() {
+             View case study
+             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+           </span>
+-        </motion.a>
++        </motion.button>
+ 
+         {/* Rest — 2-col grid */}
+         <div className="mt-6 grid gap-6 md:grid-cols-2">
+           {rest.map((p, i) => (
+-            <motion.a
+-              href={`#project-${p.id}`}
++            <motion.button
++              type="button"
++              onClick={() => setActive(p)}
+               key={p.id}
+               initial={{ opacity: 0, y: 16 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.5, delay: i * 0.05 }}
+-              className="group block rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-blue/50"
++              className="group block w-full rounded-2xl border border-border bg-surface p-7 text-left transition-colors hover:border-blue/50"
+             >
+               <span className="text-xs font-medium uppercase tracking-widest text-blue">{p.category}</span>
+               <h3 className="mt-3 font-display text-xl font-semibold text-ink">{p.name}</h3>
+@@ -62,77 +66,7 @@ export default function Projects() {
+                 View case study
+                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+               </span>
+-            </motion.a>
+-          ))}
+-        </div>
+-
+-        {/* Case study detail blocks */}
+-        <div className="mt-20 space-y-20">
+-          {projects.map((p) => (
+-            <div key={p.id} id={`project-${p.id}`} className="scroll-mt-24 border-t border-border pt-12">
+-              <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
+-                <div>
+-                  <span className="text-xs font-medium uppercase tracking-widest text-emerald">{p.category}</span>
+-                  <h3 className="mt-3 font-display text-2xl font-semibold text-ink">{p.name}</h3>
+-                  <p className="mt-2 text-sm text-muted">{p.role}</p>
+-                  <div className="mt-6 flex flex-wrap gap-3">
+-                    {p.links.demo && (
+-                      <a href={p.links.demo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-[#04120d]">
+-                        Live Demo <ArrowUpRight className="h-3.5 w-3.5" />
+-                      </a>
+-                    )}
+-                    {p.links.github && (
+-                      <a href={p.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs font-medium text-ink">
+-                        <GithubIcon className="h-3.5 w-3.5" /> Source
+-                      </a>
+-                    )}
+-                  </div>
+-                </div>
+-
+-                <div className="space-y-6">
+-                  <div>
+-                    <h4 className="text-sm font-semibold text-ink">The challenge</h4>
+-                    <p className="mt-2 text-sm leading-relaxed text-muted">{p.problem}</p>
+-                  </div>
+-                  <div>
+-                    <h4 className="text-sm font-semibold text-ink">The solution</h4>
+-                    <p className="mt-2 text-sm leading-relaxed text-muted">{p.solution}</p>
+-                  </div>
+-                  <div>
+-                    <h4 className="text-sm font-semibold text-ink">My role</h4>
+-                    <ul className="mt-2 space-y-1.5">
+-                      {p.myRole.map((r) => (
+-                        <li key={r} className="flex gap-2 text-sm leading-relaxed text-muted">
+-                          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald" />
+-                          {r}
+-                        </li>
+-                      ))}
+-                    </ul>
+-                  </div>
+-                  <div>
+-                    <h4 className="text-sm font-semibold text-ink">How it was built</h4>
+-                    <ul className="mt-2 space-y-1.5">
+-                      {p.architecture.map((r) => (
+-                        <li key={r} className="flex gap-2 text-sm leading-relaxed text-muted">
+-                          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-blue" />
+-                          {r}
+-                        </li>
+-                      ))}
+-                    </ul>
+-                  </div>
+-                  <div className="rounded-xl border border-emerald/25 bg-emerald/5 p-4">
+-                    <h4 className="text-sm font-semibold text-ink">Outcome</h4>
+-                    <p className="mt-1 text-sm leading-relaxed text-muted">{p.outcome}</p>
+-                  </div>
+-                  {p.lessons && (
+-                    <div>
+-                      <h4 className="text-sm font-semibold text-ink">Lessons</h4>
+-                      <p className="mt-2 text-sm leading-relaxed text-muted">{p.lessons}</p>
+-                    </div>
+-                  )}
+-                </div>
+-              </div>
+-            </div>
++            </motion.button>
+           ))}
+         </div>
+ 
+@@ -150,6 +84,8 @@ export default function Projects() {
+           </div>
+         </div>
+       </div>
++
++      <CaseStudyModal project={active} onClose={() => setActive(null)} />
+     </section>
+   );
+ }

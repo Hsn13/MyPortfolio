@@ -110,8 +110,10 @@ export async function POST(req: NextRequest) {
       parts: [{ text: m.content }],
     }));
 
+    const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -125,7 +127,18 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const errText = await res.text();
-      console.error("Gemini API error:", errText);
+      console.error("Gemini API error:", res.status, errText);
+
+      if (res.status === 404) {
+        return NextResponse.json(
+          {
+            reply:
+              "The AI assistant's model isn't available right now (it may have been renamed or retired by Google). If you're the site owner: check https://ai.google.dev/gemini-api/docs/models for the current free-tier model name and set GEMINI_MODEL accordingly.",
+          },
+          { status: 200 }
+        );
+      }
+
       return NextResponse.json(
         { reply: "I'm having trouble reaching my knowledge base right now — try again in a moment." },
         { status: 200 }
