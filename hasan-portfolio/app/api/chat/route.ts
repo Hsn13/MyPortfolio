@@ -110,20 +110,33 @@ export async function POST(req: NextRequest) {
       parts: [{ text: m.content }],
     }));
 
-    const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+    const primaryModel = process.env.GEMINI_MODEL ?? "gemini-flash-latest";
+    const fallbackModel = "gemini-flash-latest";
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: { temperature: 0.6, maxOutputTokens: 500 },
-        }),
-      }
-    );
+    async function callGemini(model: string) {
+      return fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents,
+            generationConfig: { temperature: 0.6, maxOutputTokens: 500 },
+          }),
+        }
+      );
+    }
+
+    let res = await callGemini(primaryModel);
+
+    // If the configured/default model has been renamed or retired, fall back
+    // once to Google's "latest" alias before giving up — this keeps the
+    // assistant working through Google's model churn without a redeploy.
+    if (res.status === 404 && primaryModel !== fallbackModel) {
+      console.warn(`Gemini model "${primaryModel}" returned 404 — retrying with "${fallbackModel}"`);
+      res = await callGemini(fallbackModel);
+    }
 
     if (!res.ok) {
       const errText = await res.text();
