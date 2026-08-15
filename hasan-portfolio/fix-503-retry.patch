@@ -1,0 +1,33 @@
+diff --git a/hasan-portfolio/app/api/chat/route.ts b/hasan-portfolio/app/api/chat/route.ts
+index d96d80b..6fe14f5 100644
+--- a/hasan-portfolio/app/api/chat/route.ts
++++ b/hasan-portfolio/app/api/chat/route.ts
+@@ -138,6 +138,14 @@ export async function POST(req: NextRequest) {
+       res = await callGemini(fallbackModel);
+     }
+ 
++    // Google's free tier occasionally returns 503 "high demand" errors that
++    // clear up within a second or two — one quick retry resolves most of them
++    // without the visitor ever noticing.
++    if (res.status === 503) {
++      await new Promise((r) => setTimeout(r, 800));
++      res = await callGemini(primaryModel);
++    }
++
+     if (!res.ok) {
+       const errText = await res.text();
+       console.error("Gemini API error:", res.status, errText);
+@@ -152,6 +160,13 @@ export async function POST(req: NextRequest) {
+         );
+       }
+ 
++      if (res.status === 503) {
++        return NextResponse.json(
++          { reply: "Google's AI service is under heavy load right now — please try again in a few seconds." },
++          { status: 200 }
++        );
++      }
++
+       return NextResponse.json(
+         { reply: "I'm having trouble reaching my knowledge base right now — try again in a moment." },
+         { status: 200 }
