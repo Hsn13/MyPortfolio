@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { GithubIcon } from "@/components/icons";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/content/knowledge";
+import ProjectVisual from "@/components/ProjectVisual";
 
 export default function CaseStudyModal({
   project,
@@ -57,7 +58,8 @@ export default function CaseStudyModal({
               <span className="text-xs font-medium uppercase tracking-widest text-emerald">{project.category}</span>
               <h3 className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
               <p className="mt-1 text-sm text-muted">{project.role}</p>
-              <p className="mt-4 text-base leading-relaxed text-ink">{project.heroStatement}</p>
+              <ProjectVisual screenshot={project.screenshot} name={project.name} className="mt-5 aspect-[16/9] w-full" />
+              <p className="mt-5 text-base leading-relaxed text-ink">{project.heroStatement}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 {project.links.demo && (

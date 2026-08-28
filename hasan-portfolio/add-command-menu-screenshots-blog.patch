@@ -1,0 +1,508 @@
+diff --git a/hasan-portfolio/app/blog/[slug]/page.tsx b/hasan-portfolio/app/blog/[slug]/page.tsx
+new file mode 100644
+index 0000000..13bd23e
+--- /dev/null
++++ b/hasan-portfolio/app/blog/[slug]/page.tsx
+@@ -0,0 +1,61 @@
++import Link from "next/link";
++import { notFound } from "next/navigation";
++import type { Metadata } from "next";
++import { ArrowLeft } from "lucide-react";
++import Nav from "@/components/Nav";
++import Contact from "@/components/Contact";
++import { posts } from "@/content/posts";
++
++export function generateStaticParams() {
++  return posts.map((p) => ({ slug: p.slug }));
++}
++
++export async function generateMetadata({
++  params,
++}: {
++  params: Promise<{ slug: string }>;
++}): Promise<Metadata> {
++  const { slug } = await params;
++  const post = posts.find((p) => p.slug === slug);
++  if (!post) return {};
++  return { title: `${post.title} | Hasan Khesro`, description: post.excerpt };
++}
++
++export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
++  const { slug } = await params;
++  const post = posts.find((p) => p.slug === slug);
++  if (!post) notFound();
++
++  return (
++    <main className="bg-bg text-ink">
++      <Nav />
++      <article className="pt-40 pb-24 md:pt-52">
++        <div className="container-px mx-auto max-w-2xl">
++          <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink">
++            <ArrowLeft className="h-4 w-4" /> Engineering Journal
++          </Link>
++
++          <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-muted">
++            <time dateTime={post.date}>
++              {new Date(post.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
++            </time>
++            <span aria-hidden>·</span>
++            <span>{post.tags.join(" · ")}</span>
++          </div>
++          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink md:text-4xl">
++            {post.title}
++          </h1>
++
++          <div className="mt-8 space-y-5">
++            {post.body.map((p, i) => (
++              <p key={i} className="text-base leading-relaxed text-muted first:text-lg first:text-ink">
++                {p}
++              </p>
++            ))}
++          </div>
++        </div>
++      </article>
++      <Contact />
++    </main>
++  );
++}
+diff --git a/hasan-portfolio/app/blog/page.tsx b/hasan-portfolio/app/blog/page.tsx
+new file mode 100644
+index 0000000..3694c4f
+--- /dev/null
++++ b/hasan-portfolio/app/blog/page.tsx
+@@ -0,0 +1,54 @@
++import Link from "next/link";
++import type { Metadata } from "next";
++import Nav from "@/components/Nav";
++import Contact from "@/components/Contact";
++import { posts } from "@/content/posts";
++
++export const metadata: Metadata = {
++  title: "Engineering Journal | Hasan Khesro",
++  description: "Notes on building products, coordinating AI projects, and what customer-facing work taught me about engineering.",
++};
++
++export default function BlogIndex() {
++  return (
++    <main className="bg-bg text-ink">
++      <Nav />
++      <section className="pt-40 pb-24 md:pt-52">
++        <div className="container-px mx-auto max-w-3xl">
++          <p className="text-xs font-medium uppercase tracking-widest text-muted">Writing</p>
++          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink md:text-5xl">Engineering Journal</h1>
++          <p className="mt-4 max-w-xl text-muted">
++            Notes on building products, coordinating AI delivery, and what customer-facing work taught me about
++            engineering.
++          </p>
++
++          <div className="mt-14 space-y-10">
++            {posts
++              .slice()
++              .sort((a, b) => (a.date < b.date ? 1 : -1))
++              .map((post) => (
++                <Link
++                  key={post.slug}
++                  href={`/blog/${post.slug}`}
++                  className="group block border-t border-border pt-8 first:border-t-0 first:pt-0"
++                >
++                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted">
++                    <time dateTime={post.date}>
++                      {new Date(post.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
++                    </time>
++                    <span aria-hidden>·</span>
++                    <span>{post.tags.join(" · ")}</span>
++                  </div>
++                  <h2 className="mt-2 font-display text-2xl font-semibold text-ink transition-colors group-hover:text-emerald">
++                    {post.title}
++                  </h2>
++                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{post.excerpt}</p>
++                </Link>
++              ))}
++          </div>
++        </div>
++      </section>
++      <Contact />
++    </main>
++  );
++}
+diff --git a/hasan-portfolio/app/page.tsx b/hasan-portfolio/app/page.tsx
+index 6b12671..a764f54 100644
+--- a/hasan-portfolio/app/page.tsx
++++ b/hasan-portfolio/app/page.tsx
+@@ -8,6 +8,7 @@ import Leadership from "@/components/Leadership";
+ import Skills from "@/components/Skills";
+ import AIChat from "@/components/AIChat";
+ import Contact from "@/components/Contact";
++import CommandMenu from "@/components/CommandMenu";
+ 
+ export default function Home() {
+   return (
+@@ -22,6 +23,7 @@ export default function Home() {
+       <Skills />
+       <AIChat />
+       <Contact />
++      <CommandMenu />
+     </main>
+   );
+ }
+diff --git a/hasan-portfolio/components/CaseStudyModal.tsx b/hasan-portfolio/components/CaseStudyModal.tsx
+index 5531ca5..2b35f59 100644
+--- a/hasan-portfolio/components/CaseStudyModal.tsx
++++ b/hasan-portfolio/components/CaseStudyModal.tsx
+@@ -6,6 +6,7 @@ import { X } from "lucide-react";
+ import { GithubIcon } from "@/components/icons";
+ import { ArrowUpRight } from "lucide-react";
+ import type { Project } from "@/content/knowledge";
++import ProjectVisual from "@/components/ProjectVisual";
+ 
+ export default function CaseStudyModal({
+   project,
+@@ -57,7 +58,8 @@ export default function CaseStudyModal({
+               <span className="text-xs font-medium uppercase tracking-widest text-emerald">{project.category}</span>
+               <h3 className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
+               <p className="mt-1 text-sm text-muted">{project.role}</p>
+-              <p className="mt-4 text-base leading-relaxed text-ink">{project.heroStatement}</p>
++              <ProjectVisual screenshot={project.screenshot} name={project.name} className="mt-5 aspect-[16/9] w-full" />
++              <p className="mt-5 text-base leading-relaxed text-ink">{project.heroStatement}</p>
+ 
+               <div className="mt-6 flex flex-wrap gap-3">
+                 {project.links.demo && (
+diff --git a/hasan-portfolio/components/CommandMenu.tsx b/hasan-portfolio/components/CommandMenu.tsx
+new file mode 100644
+index 0000000..9cfe7c6
+--- /dev/null
++++ b/hasan-portfolio/components/CommandMenu.tsx
+@@ -0,0 +1,131 @@
++"use client";
++
++import { useEffect, useState, useMemo } from "react";
++import { useRouter } from "next/navigation";
++import { motion, AnimatePresence } from "framer-motion";
++import { FileDown, FolderGit2, MessageCircle, Mail, Compass, Newspaper, Command } from "lucide-react";
++
++type Item = {
++  id: string;
++  label: string;
++  hint?: string;
++  icon: React.ElementType;
++  action: () => void;
++};
++
++export default function CommandMenu() {
++  const [open, setOpen] = useState(false);
++  const [query, setQuery] = useState("");
++  const router = useRouter();
++
++  useEffect(() => {
++    function onKey(e: KeyboardEvent) {
++      const isMeta = e.metaKey || e.ctrlKey;
++      if (isMeta && e.key.toLowerCase() === "k") {
++        e.preventDefault();
++        setOpen((v) => !v);
++      }
++      if (e.key === "Escape") setOpen(false);
++    }
++    window.addEventListener("keydown", onKey);
++    return () => window.removeEventListener("keydown", onKey);
++  }, []);
++
++  useEffect(() => {
++    document.body.style.overflow = open ? "hidden" : "";
++    if (open) setQuery("");
++  }, [open]);
++
++  const goto = (hash: string) => {
++    if (window.location.pathname !== "/") {
++      router.push(`/${hash}`);
++    } else {
++      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
++    }
++    setOpen(false);
++  };
++
++  const items: Item[] = useMemo(
++    () => [
++      { id: "projects", label: "View Projects", hint: "Go to section", icon: FolderGit2, action: () => goto("#projects") },
++      { id: "journey", label: "View Career Journey", hint: "Go to section", icon: Compass, action: () => goto("#journey") },
++      { id: "ai", label: "Ask Hasan AI", hint: "Open the assistant", icon: MessageCircle, action: () => goto("#ai") },
++      { id: "blog", label: "Read the Engineering Journal", hint: "Go to /blog", icon: Newspaper, action: () => { router.push("/blog"); setOpen(false); } },
++      { id: "contact", label: "Contact Hasan", hint: "Go to section", icon: Mail, action: () => goto("#contact") },
++      {
++        id: "cv",
++        label: "Download CV",
++        hint: "Open PDF",
++        icon: FileDown,
++        action: () => {
++          window.open("/HasanKhesro-CV.pdf", "_blank");
++          setOpen(false);
++        },
++      },
++    ],
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++    [router]
++  );
++
++  const filtered = items.filter((i) => i.label.toLowerCase().includes(query.toLowerCase()));
++
++  return (
++    <>
++      <button
++        onClick={() => setOpen(true)}
++        className="fixed bottom-6 left-4 z-40 hidden items-center gap-1.5 rounded-full border border-border bg-surface/80 px-3 py-2 text-xs text-muted backdrop-blur transition-colors hover:text-ink md:flex"
++      >
++        <Command className="h-3.5 w-3.5" />
++        <span>
++          <kbd className="font-sans">⌘</kbd>/<kbd className="font-sans">Ctrl</kbd> K
++        </span>
++      </button>
++
++      <AnimatePresence>
++        {open && (
++          <motion.div
++            initial={{ opacity: 0 }}
++            animate={{ opacity: 1 }}
++            exit={{ opacity: 0 }}
++            transition={{ duration: 0.15 }}
++            className="fixed inset-0 z-[60] flex items-start justify-center bg-black/70 p-4 pt-[15vh] backdrop-blur-sm"
++            onClick={() => setOpen(false)}
++          >
++            <motion.div
++              initial={{ opacity: 0, y: -8, scale: 0.98 }}
++              animate={{ opacity: 1, y: 0, scale: 1 }}
++              exit={{ opacity: 0, y: -8, scale: 0.98 }}
++              transition={{ duration: 0.15 }}
++              onClick={(e) => e.stopPropagation()}
++              className="w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-2xl"
++            >
++              <input
++                autoFocus
++                value={query}
++                onChange={(e) => setQuery(e.target.value)}
++                placeholder="Type a command…"
++                className="w-full border-b border-border bg-transparent px-5 py-4 text-sm text-ink outline-none placeholder:text-muted"
++              />
++              <div className="max-h-80 overflow-y-auto p-2">
++                {filtered.length === 0 && (
++                  <p className="px-3 py-6 text-center text-sm text-muted">No matching commands.</p>
++                )}
++                {filtered.map((item) => (
++                  <button
++                    key={item.id}
++                    onClick={item.action}
++                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-ink transition-colors hover:bg-surface"
++                  >
++                    <item.icon className="h-4 w-4 text-muted" />
++                    <span className="flex-1">{item.label}</span>
++                    {item.hint && <span className="text-xs text-muted">{item.hint}</span>}
++                  </button>
++                ))}
++              </div>
++            </motion.div>
++          </motion.div>
++        )}
++      </AnimatePresence>
++    </>
++  );
++}
+diff --git a/hasan-portfolio/components/Nav.tsx b/hasan-portfolio/components/Nav.tsx
+index 4d40695..6f5feb0 100644
+--- a/hasan-portfolio/components/Nav.tsx
++++ b/hasan-portfolio/components/Nav.tsx
+@@ -1,10 +1,12 @@
+ "use client";
+ 
+ import { useEffect, useState } from "react";
++import Link from "next/link";
+ 
+ const links = [
+   { href: "#projects", label: "Projects" },
+   { href: "#journey", label: "Journey" },
++  { href: "/blog", label: "Writing" },
+   { href: "#ai", label: "Ask Hasan AI" },
+   { href: "#contact", label: "Contact" },
+ ];
+@@ -29,11 +31,17 @@ export default function Nav() {
+           Hasan Khesro
+         </a>
+         <div className="hidden md:flex items-center gap-8 text-sm text-muted">
+-          {links.map((l) => (
+-            <a key={l.href} href={l.href} className="hover:text-ink transition-colors">
+-              {l.label}
+-            </a>
+-          ))}
++          {links.map((l) =>
++            l.href.startsWith("/") ? (
++              <Link key={l.href} href={l.href} className="hover:text-ink transition-colors">
++                {l.label}
++              </Link>
++            ) : (
++              <a key={l.href} href={l.href} className="hover:text-ink transition-colors">
++                {l.label}
++              </a>
++            )
++          )}
+         </div>
+         <a
+           href="/HasanKhesro-CV.pdf"
+diff --git a/hasan-portfolio/components/ProjectVisual.tsx b/hasan-portfolio/components/ProjectVisual.tsx
+new file mode 100644
+index 0000000..19aefea
+--- /dev/null
++++ b/hasan-portfolio/components/ProjectVisual.tsx
+@@ -0,0 +1,47 @@
++"use client";
++
++import Image from "next/image";
++
++/**
++ * Renders a project's screenshot if one is set in content/knowledge.ts.
++ * Otherwise falls back to a designed placeholder (not a broken image or
++ * empty gray box) so the site looks finished even before real screenshots
++ * are wired in.
++ */
++export default function ProjectVisual({
++  screenshot,
++  name,
++  className = "",
++}: {
++  screenshot?: string;
++  name: string;
++  className?: string;
++}) {
++  if (screenshot) {
++    return (
++      <div className={`relative overflow-hidden rounded-xl border border-border bg-surface ${className}`}>
++        <Image src={screenshot} alt={`${name} screenshot`} fill className="object-cover" />
++      </div>
++    );
++  }
++
++  const patternId = `grid-${name.replace(/\s+/g, "")}`;
++
++  return (
++    <div
++      className={`relative flex items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-surface ${className}`}
++    >
++      <svg className="absolute inset-0 h-full w-full opacity-[0.25]" preserveAspectRatio="xMidYMid slice">
++        <defs>
++          <pattern id={patternId} width="24" height="24" patternUnits="userSpaceOnUse">
++            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#23262f" strokeWidth="1" />
++          </pattern>
++        </defs>
++        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
++      </svg>
++      <span className="relative z-10 rounded-full border border-border bg-bg/60 px-3 py-1.5 text-[11px] font-medium text-muted backdrop-blur">
++        Screenshot coming soon
++      </span>
++    </div>
++  );
++}
+diff --git a/hasan-portfolio/components/Projects.tsx b/hasan-portfolio/components/Projects.tsx
+index de16059..f03abad 100644
+--- a/hasan-portfolio/components/Projects.tsx
++++ b/hasan-portfolio/components/Projects.tsx
+@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
+ import { ArrowUpRight } from "lucide-react";
+ import { projects, sideProjects, type Project } from "@/content/knowledge";
+ import CaseStudyModal from "@/components/CaseStudyModal";
++import ProjectVisual from "@/components/ProjectVisual";
+ 
+ export default function Projects() {
+   const [active, setActive] = useState<Project | null>(null);
+@@ -31,6 +32,7 @@ export default function Projects() {
+           className="group relative block w-full overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left transition-colors hover:border-emerald/50 md:p-12"
+         >
+           <span className="text-xs font-medium uppercase tracking-widest text-emerald">{flagship.category}</span>
++          <ProjectVisual screenshot={flagship.screenshot} name={flagship.name} className="mt-4 aspect-[16/9] w-full" />
+           <h3 className="mt-4 font-display text-3xl font-semibold text-ink md:text-4xl">{flagship.name}</h3>
+           <p className="mt-4 max-w-xl text-muted">{flagship.heroStatement}</p>
+           <div className="mt-6 flex flex-wrap gap-2">
+@@ -60,6 +62,7 @@ export default function Projects() {
+               className="group block w-full rounded-2xl border border-border bg-surface p-7 text-left transition-colors hover:border-blue/50"
+             >
+               <span className="text-xs font-medium uppercase tracking-widest text-blue">{p.category}</span>
++              <ProjectVisual screenshot={p.screenshot} name={p.name} className="mt-3 aspect-[16/10] w-full" />
+               <h3 className="mt-3 font-display text-xl font-semibold text-ink">{p.name}</h3>
+               <p className="mt-3 text-sm text-muted">{p.heroStatement}</p>
+               <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-ink">
+diff --git a/hasan-portfolio/content/knowledge.ts b/hasan-portfolio/content/knowledge.ts
+index 207acc1..94451a4 100644
+--- a/hasan-portfolio/content/knowledge.ts
++++ b/hasan-portfolio/content/knowledge.ts
+@@ -57,6 +57,8 @@ export interface Project {
+   tech: string[];
+   links: { github?: string; demo?: string };
+   featured: boolean;
++  /** Path under /public, e.g. "/images/projects/rewear-1.png". Leave empty to show a placeholder. */
++  screenshot?: string;
+ }
+ 
+ export const projects: Project[] = [
+diff --git a/hasan-portfolio/content/posts.ts b/hasan-portfolio/content/posts.ts
+new file mode 100644
+index 0000000..37490f7
+--- /dev/null
++++ b/hasan-portfolio/content/posts.ts
+@@ -0,0 +1,59 @@
++// Engineering Journal posts.
++// These are DRAFTS — grounded in real, documented facts from content/knowledge.ts,
++// written in first person as a starting point. Read through and edit the voice/
++// specifics before treating these as truly "published." Add a new post by adding
++// an entry here; the blog pages render automatically from this array.
++
++export interface Post {
++  slug: string;
++  title: string;
++  excerpt: string;
++  tags: string[];
++  date: string; // ISO, editable
++  body: string[]; // paragraphs
++}
++
++export const posts: Post[] = [
++  {
++    slug: "shipping-rewear-bahrain-solo",
++    title: "What Shipping ReWear Bahrain Solo Actually Taught Me",
++    excerpt:
++      "Notes on building a full product end to end — the API, the client, the reward mechanic — and what changes when there's no one else to hand a decision to.",
++    tags: ["Product", "Engineering"],
++    date: "2026-08-01",
++    body: [
++      "ReWear Bahrain started from a simple observation: people around me kept talking about wanting to give clothes a second life, but there was no easy way to actually do it. So I built one — a peer-to-peer platform where giving clothes earns Eco-Credits, and those credits get spent claiming items from neighbours across Bahrain. No money changes hands.",
++      "Building it solo meant every decision was mine to make and mine to live with. The backend is an Express 5 API on MongoDB Atlas, with JWT auth and multer handling uploads. The frontend is React 19 on Vite, with React Router v7 and react-leaflet for neighbourhood-based discovery over OpenStreetMap. None of that stack was the hard part.",
++      "The hard part was the credit economy itself — deciding what makes an exchange feel fair when there's no price tag to anchor it. That's a product question disguised as an engineering one, and it's the kind of decision that's easy to skip past when you're moving fast solo. I didn't skip it, and the app is better for it.",
++      "The biggest lesson: owning a product end to end, from the reward mechanic down to deployment, surfaces how many small decisions a 'simple' idea actually hides. Working on ReWear Bahrain changed how I think about scope on every project since.",
++    ],
++  },
++  {
++    slug: "coordinating-ai-without-touching-the-model",
++    title: "Coordinating an AI Project Without Touching the Model",
++    excerpt:
++      "On my role leading delivery of a predictive maintenance platform — and why project coordination on an AI team is a different skill than people assume.",
++    tags: ["AI", "Project Management"],
++    date: "2026-07-18",
++    body: [
++      "At INFINITEWARE, under the BRINC x Tamkeen Open Innovation Program, I coordinated delivery of an AI-driven predictive maintenance platform for a large industrial manufacturer in Bahrain. My role wasn't building the anomaly-detection model — it was making sure the people who did could actually ship it.",
++      "That meant owning documentation, tracking milestones, and being the steady point of contact between engineers, data scientists, and business stakeholders who all had different definitions of 'done.' It meant running UI/UX workshops so the dashboard the model fed into was something operations teams would actually trust and use — because a 96.6% accurate model that nobody trusts is worth nothing.",
++      "The thing nobody tells you about coordinating AI projects: most of the real risk isn't in the model, it's in the handoffs. Between data scientists and engineers. Between engineers and the business. Between a working prototype and something a real client will run their operations on. Coordinating well means noticing where those handoffs are about to fail before they do.",
++      "Working on ~200,000 real SCADA data points under strict confidentiality also taught me a specific kind of discipline: how to talk about impressive work in enough detail to build trust, without ever naming who it was for. That balance shows up everywhere once you start looking for it.",
++    ],
++  },
++  {
++    slug: "sales-floor-to-software",
++    title: "What the Sales Floor Taught Me About Building Software",
++    excerpt:
++      "Years in direct sales and customer service before writing production code — and why that order, not the other way around, was the useful one.",
++    tags: ["Career", "Product"],
++    date: "2026-06-30",
++    body: [
++      "Before most of my software work, I spent years in direct customer roles — Zain Bahrain, Massimo Dutti, and others. Direct sales teaches you something engineering degrees don't: what a person actually needs is rarely what they say first. You learn to ask the second and third question.",
++      "At Zain, I went from missing an early target to leading a team of 5 and driving a 20% revenue increase, alongside a real lift in customer satisfaction. That arc — struggling, adjusting, then leading — is the same arc I now recognize in engineering work. The first attempt at a feature is rarely the right one either.",
++      "The habit that carried over most directly: treating every technical decision as a conversation with someone who has to actually use the result. It's easy to build the version of a product that's satisfying to build. It's harder, and more valuable, to build the version that solves the problem the person in front of you actually has.",
++      "I don't think of the sales years as separate from the engineering ones. They're the same skill, applied to a different surface.",
++    ],
++  },
++];
+diff --git a/hasan-portfolio/public/images/projects/.gitkeep b/hasan-portfolio/public/images/projects/.gitkeep
+new file mode 100644
+index 0000000..e69de29

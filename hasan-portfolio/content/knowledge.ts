@@ -57,6 +57,8 @@ export interface Project {
   tech: string[];
   links: { github?: string; demo?: string };
   featured: boolean;
+  /** Path under /public, e.g. "/images/projects/rewear-1.png". Leave empty to show a placeholder. */
+  screenshot?: string;
 }
 
 export const projects: Project[] = [
