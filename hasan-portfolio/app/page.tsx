@@ -8,6 +8,7 @@ import Leadership from "@/components/Leadership";
 import Skills from "@/components/Skills";
 import AIChat from "@/components/AIChat";
 import Contact from "@/components/Contact";
+import CommandMenu from "@/components/CommandMenu";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <Skills />
       <AIChat />
       <Contact />
+      <CommandMenu />
     </main>
   );
 }

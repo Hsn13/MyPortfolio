@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const links = [
   { href: "#projects", label: "Projects" },
   { href: "#journey", label: "Journey" },
+  { href: "/blog", label: "Writing" },
   { href: "#ai", label: "Ask Hasan AI" },
   { href: "#contact", label: "Contact" },
 ];
@@ -29,11 +31,17 @@ export default function Nav() {
           Hasan Khesro
         </a>
         <div className="hidden md:flex items-center gap-8 text-sm text-muted">
-          {links.map((l) => (
-            <a key={l.href} href={l.href} className="hover:text-ink transition-colors">
-              {l.label}
-            </a>
-          ))}
+          {links.map((l) =>
+            l.href.startsWith("/") ? (
+              <Link key={l.href} href={l.href} className="hover:text-ink transition-colors">
+                {l.label}
+              </Link>
+            ) : (
+              <a key={l.href} href={l.href} className="hover:text-ink transition-colors">
+                {l.label}
+              </a>
+            )
+          )}
         </div>
         <a
           href="/HasanKhesro-CV.pdf"

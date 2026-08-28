@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { projects, sideProjects, type Project } from "@/content/knowledge";
 import CaseStudyModal from "@/components/CaseStudyModal";
+import ProjectVisual from "@/components/ProjectVisual";
 
 export default function Projects() {
   const [active, setActive] = useState<Project | null>(null);
@@ -31,6 +32,7 @@ export default function Projects() {
           className="group relative block w-full overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left transition-colors hover:border-emerald/50 md:p-12"
         >
           <span className="text-xs font-medium uppercase tracking-widest text-emerald">{flagship.category}</span>
+          <ProjectVisual screenshot={flagship.screenshot} name={flagship.name} className="mt-4 aspect-[16/9] w-full" />
           <h3 className="mt-4 font-display text-3xl font-semibold text-ink md:text-4xl">{flagship.name}</h3>
           <p className="mt-4 max-w-xl text-muted">{flagship.heroStatement}</p>
           <div className="mt-6 flex flex-wrap gap-2">
@@ -60,6 +62,7 @@ export default function Projects() {
               className="group block w-full rounded-2xl border border-border bg-surface p-7 text-left transition-colors hover:border-blue/50"
             >
               <span className="text-xs font-medium uppercase tracking-widest text-blue">{p.category}</span>
+              <ProjectVisual screenshot={p.screenshot} name={p.name} className="mt-3 aspect-[16/10] w-full" />
               <h3 className="mt-3 font-display text-xl font-semibold text-ink">{p.name}</h3>
               <p className="mt-3 text-sm text-muted">{p.heroStatement}</p>
               <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-ink">
