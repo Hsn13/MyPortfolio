@@ -169,7 +169,8 @@ export const projects: Project[] = [
     challenges: ["Keeping the AI integration purposeful rather than decorative"],
     outcome: "A working exploration of AI-assisted product thinking.",
     tech: ["React", "Node.js", "MongoDB"],
-    links: {},
+    screenshot: "/images/projects/verde-dashboard.svg",
+    links: { github: "https://github.com/Hsn13/verde-ai-commerce-demo" },
     featured: true,
   },
   {
@@ -188,7 +189,8 @@ export const projects: Project[] = [
     challenges: ["Keeping retrieved context relevant without overwhelming the model", "Designing prompts that stayed personalized rather than generic"],
     outcome: "A deployed, working RAG application generating personalized itineraries.",
     tech: ["Python", "Django", "Gemini API", "LangChain", "ChromaDB", "Streamlit"],
-    links: {},
+    screenshot: "/images/projects/travel-ai-planner.svg",
+    links: { github: "https://github.com/Hsn13/ai-travel-assistant-demo" },
     featured: true,
   },
 ];

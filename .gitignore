@@ -1,0 +1,4 @@
+# Local demo repositories are published separately and should not be nested
+# inside the portfolio repository.
+/generated-projects/
+/package-lock.json

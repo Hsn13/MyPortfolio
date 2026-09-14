@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">AI Travel Assistant itinerary planner</title>
+  <desc id="desc">A travel planning interface with preferences, a route summary, and a three-day itinerary.</desc>
+  <rect width="1600" height="1000" rx="32" fill="#09111f"/>
+  <rect x="48" y="48" width="1504" height="904" rx="24" fill="#101c31" stroke="#29476b"/>
+  <text x="100" y="125" fill="#eef6ff" font-family="Arial, sans-serif" font-size="34" font-weight="700">atlas / assistant</text>
+  <text x="100" y="164" fill="#8ca9c9" font-family="Arial, sans-serif" font-size="18">A thoughtful itinerary, generated around your pace.</text>
+  <rect x="100" y="220" width="420" height="650" rx="20" fill="#142640"/>
+  <text x="140" y="280" fill="#86d6ff" font-family="Arial, sans-serif" font-size="18" font-weight="700">YOUR TRIP</text>
+  <text x="140" y="345" fill="#eef6ff" font-family="Arial, sans-serif" font-size="30" font-weight="700">Lisbon, Portugal</text>
+  <text x="140" y="385" fill="#8ca9c9" font-family="Arial, sans-serif" font-size="18">4 days · slow explorer</text>
+  <text x="140" y="465" fill="#8ca9c9" font-family="Arial, sans-serif" font-size="16">STYLE</text>
+  <rect x="140" y="490" width="150" height="44" rx="22" fill="#86d6ff"/><text x="177" y="519" fill="#07111f" font-family="Arial, sans-serif" font-size="16">Food & culture</text>
+  <rect x="302" y="490" width="140" height="44" rx="22" fill="#1d3959"/><text x="340" y="519" fill="#b9d3ec" font-family="Arial, sans-serif" font-size="16">Low rush</text>
+  <text x="140" y="625" fill="#8ca9c9" font-family="Arial, sans-serif" font-size="16">BUDGET RANGE</text>
+  <text x="140" y="675" fill="#eef6ff" font-family="Arial, sans-serif" font-size="24">€€ · balanced</text>
+  <rect x="600" y="220" width="850" height="170" rx="20" fill="#172d49"/>
+  <text x="650" y="275" fill="#86d6ff" font-family="Arial, sans-serif" font-size="18" font-weight="700">AI ROUTE SUMMARY</text>
+  <text x="650" y="325" fill="#eef6ff" font-family="Arial, sans-serif" font-size="24">Neighbourhoods first, landmarks second.</text>
+  <text x="650" y="360" fill="#8ca9c9" font-family="Arial, sans-serif" font-size="17">Walkable mornings · local tables · one flexible evening</text>
+  <text x="600" y="465" fill="#eef6ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">Your itinerary</text>
+  <g>
+    <rect x="600" y="500" width="250" height="300" rx="18" fill="#142640" stroke="#31567e"/>
+    <rect x="875" y="500" width="250" height="300" rx="18" fill="#142640" stroke="#31567e"/>
+    <rect x="1150" y="500" width="300" height="300" rx="18" fill="#142640" stroke="#86d6ff"/>
+  </g>
+  <g font-family="Arial, sans-serif">
+    <text x="635" y="555" fill="#86d6ff" font-size="17">DAY 01</text><text x="635" y="610" fill="#eef6ff" font-size="22">Old town</text><text x="635" y="660" fill="#8ca9c9" font-size="17">Alfama walk</text><text x="635" y="700" fill="#8ca9c9" font-size="17">Tile workshop</text>
+    <text x="910" y="555" fill="#86d6ff" font-size="17">DAY 02</text><text x="910" y="610" fill="#eef6ff" font-size="22">Slow coast</text><text x="910" y="660" fill="#8ca9c9" font-size="17">Market breakfast</text><text x="910" y="700" fill="#8ca9c9" font-size="17">Sunset ferry</text>
+    <text x="1185" y="555" fill="#86d6ff" font-size="17">DAY 03</text><text x="1185" y="610" fill="#eef6ff" font-size="22">Local rhythm</text><text x="1185" y="660" fill="#8ca9c9" font-size="17">Bookshop café</text><text x="1185" y="700" fill="#8ca9c9" font-size="17">Fado, if wanted</text>
+  </g>
+</svg>
