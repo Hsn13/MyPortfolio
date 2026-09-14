@@ -182,14 +182,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let res = await callGemini(primaryModel);
+    let activeModel = primaryModel;
+    let res = await callGemini(activeModel);
 
     // If the configured/default model has been renamed or retired, fall back
     // once to Google's "latest" alias before giving up — this keeps the
     // assistant working through Google's model churn without a redeploy.
     if (res.status === 404 && primaryModel !== fallbackModel) {
       console.warn(`Gemini model "${primaryModel}" returned 404 — retrying with "${fallbackModel}"`);
-      res = await callGemini(fallbackModel);
+      activeModel = fallbackModel;
+      res = await callGemini(activeModel);
     }
 
     // Google's free tier occasionally returns 503 "high demand" errors that
@@ -197,7 +199,7 @@ export async function POST(req: NextRequest) {
     // without the visitor ever noticing.
     if (res.status === 503) {
       await new Promise((r) => setTimeout(r, 800));
-      res = await callGemini(primaryModel);
+      res = await callGemini(activeModel);
     }
 
     if (!res.ok) {

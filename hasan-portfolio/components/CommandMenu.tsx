@@ -114,6 +114,7 @@ export default function CommandMenu() {
               </h2>
               <input
                 autoFocus
+                aria-label="Search commands"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Type a command…"

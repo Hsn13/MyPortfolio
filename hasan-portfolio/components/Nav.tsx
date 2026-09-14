@@ -38,9 +38,9 @@ export default function Nav() {
       }`}
     >
       <nav className="container-px mx-auto max-w-7xl flex items-center justify-between h-16">
-        <a href="#top" className="font-display font-semibold tracking-tight text-ink">
+        <Link href="/#top" className="font-display font-semibold tracking-tight text-ink">
           Hasan Khesro
-        </a>
+        </Link>
         <div className="hidden items-center gap-8 text-sm text-muted md:flex">
           {links.map((l) =>
             l.href.startsWith("/") ? (
