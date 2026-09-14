@@ -96,6 +96,7 @@ export default function CommandMenu() {
             transition={{ duration: 0.15 }}
             className="fixed inset-0 z-[60] flex items-start justify-center bg-black/70 p-4 pt-[15vh] backdrop-blur-sm"
             onClick={() => setOpen(false)}
+            role="presentation"
           >
             <motion.div
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -103,8 +104,14 @@ export default function CommandMenu() {
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="command-menu-title"
               className="w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-2xl"
             >
+              <h2 id="command-menu-title" className="sr-only">
+                Command menu
+              </h2>
               <input
                 autoFocus
                 value={query}

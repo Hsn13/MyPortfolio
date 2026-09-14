@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const links = [
-  { href: "#projects", label: "Projects" },
-  { href: "#journey", label: "Journey" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#journey", label: "Journey" },
   { href: "/blog", label: "Writing" },
-  { href: "#ai", label: "Ask Hasan AI" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#ai", label: "Ask Hasan AI" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Nav() {

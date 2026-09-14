@@ -13,6 +13,44 @@ import {
 
 export const runtime = "nodejs";
 
+const MAX_MESSAGES = 20;
+const MAX_MESSAGE_LENGTH = 4_000;
+const MAX_TOTAL_LENGTH = 20_000;
+const WINDOW_MS = 60_000;
+const MAX_REQUESTS_PER_WINDOW = 20;
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+type ChatMessage = { role: "user" | "assistant"; content: string };
+
+function isChatMessage(value: unknown): value is ChatMessage {
+  if (!value || typeof value !== "object") return false;
+  const message = value as Record<string, unknown>;
+  return (
+    (message.role === "user" || message.role === "assistant") &&
+    typeof message.content === "string" &&
+    message.content.trim().length > 0 &&
+    message.content.length <= MAX_MESSAGE_LENGTH
+  );
+}
+
+function getClientKey(req: NextRequest) {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+}
+
+function isRateLimited(key: string) {
+  const now = Date.now();
+  for (const [storedKey, entry] of requestCounts) {
+    if (entry.resetAt <= now) requestCounts.delete(storedKey);
+  }
+  const current = requestCounts.get(key);
+  if (!current || current.resetAt <= now) {
+    requestCounts.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  current.count += 1;
+  return current.count > MAX_REQUESTS_PER_WINDOW;
+}
+
 // Builds the grounding context the model is allowed to draw from.
 // If you add a fact to content/knowledge.ts, the assistant learns it automatically.
 function buildKnowledgeBlock() {
@@ -92,9 +130,21 @@ ${buildKnowledgeBlock()}`;
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = (await req.json()) as {
-      messages: { role: "user" | "assistant"; content: string }[];
-    };
+    if (isRateLimited(getClientKey(req))) {
+      return NextResponse.json({ reply: "Please wait a moment before sending another message." }, { status: 429 });
+    }
+
+    const body: unknown = await req.json();
+    const messages = body && typeof body === "object" && "messages" in body ? body.messages : null;
+    if (
+      !Array.isArray(messages) ||
+      messages.length === 0 ||
+      messages.length > MAX_MESSAGES ||
+      !messages.every(isChatMessage) ||
+      messages.reduce((total, message) => total + message.content.length, 0) > MAX_TOTAL_LENGTH
+    ) {
+      return NextResponse.json({ reply: "Please send a shorter, valid conversation." }, { status: 400 });
+    }
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -185,6 +235,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ reply });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ reply: "Something went wrong on my end — try again." }, { status: 200 });
+    return NextResponse.json({ reply: "Something went wrong on my end — try again." }, { status: 500 });
   }
 }
