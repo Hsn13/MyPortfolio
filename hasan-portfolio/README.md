@@ -29,9 +29,9 @@ Almost everything on the site (bio, projects, timeline, skills, certifications) 
 `content/knowledge.ts`. Edit that one file and both the website AND the AI assistant update —
 the assistant's knowledge is generated from the same data, so it can never contradict the site.
 
-Project screenshots: drop images into `public/images/projects/` and reference them from
-`content/knowledge.ts` (a `screenshot` field can be added per project) whenever you're ready —
-placeholders were intentionally left out of scope for now so you can wire these up yourself.
+Project screenshots live in `public/images/projects/` and are referenced from
+`content/knowledge.ts`. The VERDÉ and Roamwise images are original UI mockups for the
+separate synthetic demo repositories; they are not screenshots of confidential client systems.
 
 ## Copilot prompts
 
