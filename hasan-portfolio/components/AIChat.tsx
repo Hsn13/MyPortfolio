@@ -65,7 +65,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
         {messages.length === 0 && (
           <div className="space-y-2">
-            <p className="text-sm text-muted">Ask me anything about Hasan's work, projects, or experience.</p>
+            <p className="text-sm text-muted">Ask me anything about Hasan&apos;s work, projects, or experience.</p>
             <div className="flex flex-col gap-2 pt-2">
               {STARTERS.map((s) => (
                 <button
@@ -133,8 +133,8 @@ export default function AIChat() {
           <p className="text-xs font-medium uppercase tracking-widest text-muted">Signature feature</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ask Hasan AI</h2>
           <p className="mx-auto mt-4 max-w-xl text-muted">
-            A live assistant grounded only in Hasan's real projects, experience, and skills — ask it what a
-            resume can't answer.
+            A live assistant grounded only in Hasan&apos;s real projects, experience, and skills — ask it what a
+            resume cannot answer.
           </p>
           <button
             onClick={() => setOpen(true)}

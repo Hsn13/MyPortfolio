@@ -23,7 +23,11 @@ export default function CommandMenu() {
       const isMeta = e.metaKey || e.ctrlKey;
       if (isMeta && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setOpen((v) => !v);
+        setOpen((v) => {
+          const next = !v;
+          if (next) setQuery("");
+          return next;
+        });
       }
       if (e.key === "Escape") setOpen(false);
     }
@@ -33,7 +37,6 @@ export default function CommandMenu() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    if (open) setQuery("");
   }, [open]);
 
   const goto = (hash: string) => {
@@ -72,7 +75,10 @@ export default function CommandMenu() {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setQuery("");
+          setOpen(true);
+        }}
         className="fixed bottom-6 left-4 z-40 hidden items-center gap-1.5 rounded-full border border-border bg-surface/80 px-3 py-2 text-xs text-muted backdrop-blur transition-colors hover:text-ink md:flex"
       >
         <Command className="h-3.5 w-3.5" />
