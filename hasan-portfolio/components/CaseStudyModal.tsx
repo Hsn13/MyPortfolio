@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { GithubIcon } from "@/components/icons";
@@ -15,12 +15,15 @@ export default function CaseStudyModal({
   project: Project | null;
   onClose: () => void;
 }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
   // Lock body scroll while open, close on Escape.
   useEffect(() => {
     if (!project) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -37,6 +40,7 @@ export default function CaseStudyModal({
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm md:items-center md:p-8"
           onClick={onClose}
+          role="presentation"
         >
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
@@ -44,9 +48,13 @@ export default function CaseStudyModal({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="case-study-title"
             className="relative w-full max-w-3xl rounded-2xl border border-border bg-surface-2 shadow-2xl"
           >
             <button
+              ref={closeButtonRef}
               onClick={onClose}
               aria-label="Close case study"
               className="absolute right-4 top-4 z-10 rounded-full border border-border bg-surface p-2 text-muted hover:text-ink"
@@ -56,7 +64,7 @@ export default function CaseStudyModal({
 
             <div className="max-h-[85vh] overflow-y-auto p-7 md:p-10">
               <span className="text-xs font-medium uppercase tracking-widest text-emerald">{project.category}</span>
-              <h3 className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
+              <h3 id="case-study-title" className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
               <p className="mt-1 text-sm text-muted">{project.role}</p>
               <ProjectVisual screenshot={project.screenshot} name={project.name} className="mt-5 aspect-[16/9] w-full" />
               <p className="mt-5 text-base leading-relaxed text-ink">{project.heroStatement}</p>
