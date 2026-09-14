@@ -18,6 +18,20 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -50,14 +64,18 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 24, scale: 0.98 }}
       transition={{ duration: 0.2 }}
+      id="ai-chat-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ai-chat-title"
       className="fixed bottom-24 right-4 z-50 flex h-[70vh] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-2xl md:right-6 md:h-[560px]"
     >
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div>
-          <p className="text-sm font-semibold text-ink">Ask Hasan AI</p>
+          <p id="ai-chat-title" className="text-sm font-semibold text-ink">Ask Hasan AI</p>
           <p className="text-xs text-muted">Grounded in his real projects & experience</p>
         </div>
-        <button onClick={onClose} aria-label="Close chat" className="text-muted hover:text-ink">
+        <button ref={closeRef} onClick={onClose} aria-label="Close chat" className="text-muted hover:text-ink">
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -149,6 +167,8 @@ export default function AIChat() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="Toggle Ask Hasan AI"
+        aria-expanded={open}
+        aria-controls={open ? "ai-chat-dialog" : undefined}
         className="fixed bottom-6 right-4 z-50 flex items-center gap-2 rounded-full bg-emerald px-5 py-3.5 text-sm font-semibold text-[#04120d] shadow-lg md:right-6"
       >
         <MessageCircle className="h-4 w-4" />

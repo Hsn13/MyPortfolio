@@ -23,10 +23,18 @@ function Metric({ value, label, detail, i }: { value: string; label: string; det
   }, [inView, value, i]);
 
   return (
-    <div ref={ref} className="group relative border-t border-border py-6 first:border-t-0 md:border-t-0 md:border-l md:py-2 md:pl-6 md:first:border-l-0 md:first:pl-0">
+    <div
+      ref={ref}
+      tabIndex={0}
+      aria-describedby={`metric-detail-${i}`}
+      className="group relative border-t border-border py-6 outline-none first:border-t-0 focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-emerald md:border-t-0 md:border-l md:py-2 md:pl-6 md:first:border-l-0 md:first:pl-0"
+    >
       <div className="font-display text-4xl font-semibold text-ink md:text-5xl">{display}</div>
       <div className="mt-1 text-sm font-medium text-muted">{label}</div>
-      <div className="pointer-events-none absolute left-0 top-full z-10 mt-2 w-56 rounded-lg border border-border bg-surface-2 p-3 text-xs text-muted opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100">
+      <div
+        id={`metric-detail-${i}`}
+        className="mt-2 text-xs leading-relaxed text-muted md:pointer-events-none md:absolute md:left-0 md:top-full md:z-10 md:mt-2 md:w-56 md:rounded-lg md:border md:border-border md:bg-surface-2 md:p-3 md:opacity-0 md:shadow-xl md:transition-opacity md:duration-200 md:group-hover:opacity-100 md:group-focus:opacity-100"
+      >
         {detail}
       </div>
     </div>
