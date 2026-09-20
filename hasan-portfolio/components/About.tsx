@@ -21,8 +21,8 @@ export default function About() {
               alt="Portrait of Hasan Khesro"
               width={480}
               height={560}
+              sizes="(max-width: 767px) 100vw, 40vw"
               className="h-auto w-full object-cover grayscale-[15%]"
-              priority
             />
           </div>
         </motion.div>

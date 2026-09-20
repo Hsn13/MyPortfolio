@@ -20,7 +20,13 @@ export default function ProjectVisual({
   if (screenshot) {
     return (
       <div className={`relative overflow-hidden rounded-xl border border-border bg-surface ${className}`}>
-        <Image src={screenshot} alt={`${name} screenshot`} fill className="object-cover" />
+        <Image
+          src={screenshot}
+          alt={`${name} screenshot`}
+          fill
+          sizes="(max-width: 767px) 100vw, 50vw"
+          className="object-cover"
+        />
       </div>
     );
   }
