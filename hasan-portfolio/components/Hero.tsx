@@ -1,12 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, MapPin, ArrowDownRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { profile } from "@/content/knowledge";
+import SystemsOrb from "@/components/SystemsOrb";
 
 export default function Hero() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const update = () =>
+      setTime(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Bahrain" }).format());
+    update();
+    const interval = window.setInterval(update, 30_000);
+    return () => window.clearInterval(interval);
+  }, []);
+
   return (
-    <section id="top" className="relative overflow-hidden pt-36 pb-20 md:pt-48 md:pb-28">
+    <section id="top" className="hero-stage relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-24">
       {/* ambient network backdrop — the one deliberate motion moment */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <svg className="absolute inset-0 h-full w-full opacity-[0.35]" preserveAspectRatio="xMidYMid slice">
@@ -43,38 +55,31 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="container-px relative mx-auto max-w-6xl">
-        <div className="mb-10 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-muted">
-          <span className="h-px w-10 bg-emerald" />
-          Full-stack engineer / AI builder
+      <div className="container-px relative mx-auto max-w-7xl">
+        <div className="mb-12 flex items-center justify-between border-b border-border/70 pb-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted">
+          <span className="flex items-center gap-2"><span className="live-dot" /> Available for select opportunities</span>
+          <span className="hidden items-center gap-3 md:flex"><MapPin className="h-3.5 w-3.5 text-emerald" /> {profile.location} <span className="text-border">/</span> {time || "—"} local time</span>
         </div>
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-xs text-muted"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-emerald" />
-          Muharraq, Bahrain · Open to Software Engineer, Full-Stack & PM roles
-        </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.05 }}
-          className="text-balance max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-ink md:text-7xl lg:text-[6.5rem]"
-        >
-          {profile.headline}
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted md:text-xl"
-        >
-          {profile.subhead}
-        </motion.p>
+        <div className="grid items-center gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:gap-8">
+          <div>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="mb-6 flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-emerald">
+              <Sparkles className="h-3.5 w-3.5" /> Full-stack engineer / AI builder
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.05 }}
+              className="text-balance max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[-0.07em] text-ink md:text-7xl lg:text-[7.5rem]"
+            >
+              {profile.headline}
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.18 }} className="mt-8 max-w-xl text-balance text-lg leading-relaxed text-muted md:text-xl">
+              {profile.subhead}
+            </motion.p>
+          </div>
+          <SystemsOrb />
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -100,6 +105,9 @@ export default function Hero() {
             className="inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted transition-colors hover:text-ink"
           >
             Download CV
+          </a>
+          <a href="#about" className="group inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted transition-colors hover:text-ink">
+            Scroll to explore <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
         </motion.div>
       </div>

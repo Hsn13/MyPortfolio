@@ -13,12 +13,13 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-24 md:py-32">
-      <div className="container-px mx-auto max-w-6xl">
-        <div className="mb-14 max-w-2xl">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Featured work</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink md:text-4xl">
-            Built, not just coded
-          </h2>
+      <div className="container-px mx-auto max-w-7xl">
+        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-widest text-emerald">Selected systems / 01—05</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-ink md:text-6xl">Built, not just coded</h2>
+          </div>
+          <p className="max-w-xs text-sm leading-relaxed text-muted">A small selection of products, platforms, and experiments where engineering meets useful outcomes.</p>
         </div>
 
         {/* Flagship — large card */}
@@ -29,12 +30,14 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="group relative block w-full overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left transition-colors hover:border-emerald/50 md:p-12"
+          className="group relative block w-full overflow-hidden rounded-[2rem] border border-border bg-surface p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-emerald/60 hover:shadow-[0_28px_80px_rgba(0,0,0,0.12)] md:p-10"
         >
           <span className="text-xs font-medium uppercase tracking-widest text-emerald">{flagship.category}</span>
           <ProjectVisual screenshot={flagship.screenshot} name={flagship.name} className="mt-4 aspect-[16/9] w-full" />
-          <h3 className="mt-4 font-display text-3xl font-semibold text-ink md:text-4xl">{flagship.name}</h3>
-          <p className="mt-4 max-w-xl text-muted">{flagship.heroStatement}</p>
+          <div className="mt-6 grid gap-4 md:grid-cols-[1fr_0.8fr] md:items-end">
+            <h3 className="font-display text-3xl font-semibold tracking-[-0.04em] text-ink md:text-5xl">{flagship.name}</h3>
+            <p className="max-w-xl text-sm leading-relaxed text-muted">{flagship.heroStatement}</p>
+          </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {flagship.tech.map((t) => (
               <span key={t} className="rounded-full border border-border px-3 py-1 text-xs text-muted">
@@ -59,7 +62,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group block w-full rounded-2xl border border-border bg-surface p-7 text-left transition-colors hover:border-blue/50"
+              className="group block w-full rounded-[1.5rem] border border-border bg-surface p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-emerald/50 hover:shadow-[0_24px_60px_rgba(0,0,0,0.1)]"
             >
               <span className="text-xs font-medium uppercase tracking-widest text-blue">{p.category}</span>
               <ProjectVisual screenshot={p.screenshot} name={p.name} className="mt-3 aspect-[16/10] w-full" />
