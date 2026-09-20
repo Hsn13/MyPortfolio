@@ -9,10 +9,12 @@ import Skills from "@/components/Skills";
 import AIChat from "@/components/AIChat";
 import Contact from "@/components/Contact";
 import CommandMenu from "@/components/CommandMenu";
+import ScrollChrome from "@/components/ScrollChrome";
 
 export default function Home() {
   return (
     <main className="bg-bg text-ink">
+      <ScrollChrome />
       <Nav />
       <Hero />
       <ImpactDashboard />
