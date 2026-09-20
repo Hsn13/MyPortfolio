@@ -1,0 +1,52 @@
+# Vercel Web Analytics Installation Report
+
+## Summary
+Successfully installed and configured Vercel Web Analytics for this Next.js portfolio project.
+
+## Changes Made
+
+### 1. Package Installation
+- Installed `@vercel/analytics` package (version automatically resolved by npm)
+- Updated `package.json` with the new dependency
+- Updated `package-lock.json` with dependency tree (376 packages added)
+
+### 2. Analytics Configuration
+Modified `app/layout.tsx`:
+- Added import statement: `import { Analytics } from "@vercel/analytics/next"`
+- Added `<Analytics />` component inside the `<body>` element after `{children}`
+
+## Implementation Details
+
+### Framework-Specific Setup
+This project uses Next.js 16.3.5 with the App Router, so I followed the official Vercel documentation for Next.js App Router setup:
+1. Fetched the latest installation instructions from https://vercel.com/docs/analytics/quickstart
+2. Installed the package using npm (the project's package manager)
+3. Added the Analytics component to the root layout file as per Next.js App Router guidelines
+
+### File Changes
+**Created:**
+- None
+
+**Modified:**
+- `app/layout.tsx` - Added Analytics import and component
+- `package.json` - Added @vercel/analytics dependency
+- `package-lock.json` - Updated with new dependency tree
+
+## Verification Steps Completed
+✓ Linter passed without errors (`npm run lint`)
+✓ Build completed successfully (`npm run build`)
+✓ All dependencies installed correctly
+✓ TypeScript compilation successful
+✓ No tests to run (no test script defined in package.json)
+
+## Next Steps
+To activate Web Analytics on Vercel:
+1. Deploy this project to Vercel (`vercel deploy`)
+2. Enable Web Analytics in the Vercel dashboard (Analytics section)
+3. Monitor the Network tab for analytics requests confirming data collection
+
+## Notes
+- The Analytics component is automatically tree-shaken in development mode
+- Analytics will only track data when deployed on Vercel
+- No additional configuration is required; the component works out of the box
+- The implementation follows the latest official Vercel documentation guidelines
