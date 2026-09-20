@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #fffefb;
-  --color-surface: #fffefb;
-  --color-surface-2: #eceae3;
-  --color-border: #c5c0b1;
-  --color-emerald: #ff4f00;
-  --color-emerald-deep: #201515;
-  --color-blue: #36342e;
-  --color-blue-deep: #201515;
-  --color-ink: #201515;
-  --color-muted: #6f6b60;
+  --color-bg: #0b0b0d;
+  --color-surface: #141417;
+  --color-surface-2: #1c1c20;
+  --color-border: #34343a;
+  --color-emerald: #ff6a2a;
+  --color-emerald-deep: #ffb088;
+  --color-blue: #a8a8b4;
+  --color-blue-deep: #f0eff2;
+  --color-ink: #f8f5f1;
+  --color-muted: #a6a1a0;
 }
 
 html[data-theme="light"] {
@@ -60,6 +60,19 @@ body {
   transition: background-color 200ms ease, color 200ms ease;
 }
 
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  opacity: 0.35;
+  background-image: linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display), system-ui, sans-serif;
 }
@@ -97,4 +110,41 @@ h1, h2, h3, h4 {
 
 .text-balance {
   text-wrap: balance;
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  height: 2.25rem;
+  width: 4.25rem;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0 0.55rem;
+  color: var(--color-muted);
+  background: var(--color-surface);
+}
+
+.theme-toggle::after {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  height: 1.75rem;
+  width: 1.75rem;
+  border-radius: 999px;
+  content: "";
+  background: var(--color-emerald);
+  transition: transform 200ms ease;
+}
+
+html[data-theme="light"] .theme-toggle::after {
+  transform: translateX(2rem);
+}
+
+.theme-toggle svg {
+  position: relative;
+  z-index: 1;
+  height: 0.85rem;
+  width: 0.85rem;
 }

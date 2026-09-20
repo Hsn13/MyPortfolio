@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Sparkles, ArrowUpRight } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -68,19 +68,25 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="ai-chat-title"
-      className="fixed bottom-24 right-4 z-50 flex h-[70vh] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-2xl md:right-6 md:h-[560px]"
+      className="fixed bottom-24 right-4 z-50 flex h-[min(680px,calc(100dvh-7rem))] w-[calc(100vw-2rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:right-8"
     >
-      <div className="flex items-center justify-between border-b border-border px-5 py-4">
-        <div>
-          <p id="ai-chat-title" className="text-sm font-semibold text-ink">Ask Hasan AI</p>
-          <p className="text-xs text-muted">Grounded in his real projects & experience</p>
+      <div className="relative overflow-hidden border-b border-border bg-emerald px-5 py-5 text-[#201515]">
+        <div className="absolute -right-5 -top-8 h-28 w-28 rounded-full border border-[#201515]/20" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em]">
+              <Sparkles className="h-3.5 w-3.5" /> Signature assistant
+            </div>
+            <p id="ai-chat-title" className="text-lg font-semibold">Ask Hasan AI</p>
+            <p className="mt-1 max-w-[15rem] text-xs text-[#201515]/70">Grounded in his real projects & experience</p>
+          </div>
+          <button ref={closeRef} onClick={onClose} aria-label="Close chat" className="rounded-full p-2 text-[#201515]/70 transition-colors hover:bg-[#201515]/10 hover:text-[#201515]">
+            <X className="h-5 w-5" />
+          </button>
         </div>
-        <button ref={closeRef} onClick={onClose} aria-label="Close chat" className="text-muted hover:text-ink">
-          <X className="h-5 w-5" />
-        </button>
       </div>
 
-      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
         {messages.length === 0 && (
           <div className="space-y-2">
             <p className="text-sm text-muted">Ask me anything about Hasan&apos;s work, projects, or experience.</p>
@@ -147,20 +153,30 @@ export default function AIChat() {
   return (
     <>
       <section id="ai" className="border-t border-border py-24 md:py-32">
-        <div className="container-px mx-auto max-w-3xl text-center">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Signature feature</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ask Hasan AI</h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted">
-            A live assistant grounded only in Hasan&apos;s real projects, experience, and skills — ask it what a
-            resume cannot answer.
-          </p>
-          <button
-            onClick={() => setOpen(true)}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#201515]"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Start a conversation
-          </button>
+        <div className="container-px mx-auto max-w-4xl">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left md:p-12">
+            <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full border border-emerald/30" />
+            <div className="relative max-w-2xl">
+              <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-emerald">
+                <Sparkles className="h-3.5 w-3.5" /> Signature feature
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink md:text-5xl">Ask Hasan AI</h2>
+              <p className="mt-4 max-w-xl text-muted">
+                A live assistant grounded only in Hasan&apos;s real projects, experience, and skills — ask it what a
+                resume cannot answer.
+              </p>
+              <button
+                onClick={() => setOpen(true)}
+                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3 text-sm font-semibold text-[#201515]"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Start a conversation
+              </button>
+            </div>
+            <div className="absolute bottom-8 right-8 hidden items-center gap-2 text-xs font-medium text-muted md:flex">
+              Explore the work <ArrowUpRight className="h-4 w-4" />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -169,10 +185,13 @@ export default function AIChat() {
         aria-label="Toggle Ask Hasan AI"
         aria-expanded={open}
         aria-controls={open ? "ai-chat-dialog" : undefined}
-        className="fixed bottom-6 right-4 z-50 flex items-center gap-2 rounded-full bg-emerald px-5 py-3.5 text-sm font-semibold text-[#201515] shadow-lg md:right-6"
+        className="fixed bottom-6 right-4 z-50 flex items-center gap-3 rounded-2xl border border-[#201515]/15 bg-emerald px-4 py-3 text-left text-[#201515] shadow-[0_14px_40px_rgba(255,106,42,0.28)] transition-transform hover:-translate-y-1 md:bottom-8 md:right-8"
       >
-        <MessageCircle className="h-4 w-4" />
-        Ask Hasan AI
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#201515]/10"><MessageCircle className="h-4 w-4" /></span>
+        <span className="flex flex-col">
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em]">Available now</span>
+          <span className="text-sm font-semibold">{open ? "Close assistant" : "Ask Hasan AI"}</span>
+        </span>
       </button>
 
       <AnimatePresence>{open && <ChatPanel onClose={() => setOpen(false)} />}</AnimatePresence>

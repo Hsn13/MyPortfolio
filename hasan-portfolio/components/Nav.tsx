@@ -50,13 +50,14 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
-        scrolled ? "bg-bg/85 backdrop-blur border-b border-border" : "bg-transparent"
+      className={`fixed top-0 inset-x-0 z-40 transition-all duration-300 ${
+        scrolled ? "bg-bg/85 backdrop-blur border-b border-border shadow-sm" : "bg-transparent"
       }`}
     >
       <nav className="container-px mx-auto flex h-16 max-w-7xl items-center justify-between">
-        <Link href="/#top" className="font-display font-semibold tracking-tight text-ink">
-          Hasan Khesro
+        <Link href="/#top" className="group flex items-center gap-3 font-display font-semibold tracking-tight text-ink">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald text-sm text-[#201515]">H</span>
+          <span>Hasan Khesro</span>
         </Link>
         <div className="hidden items-center gap-8 text-sm text-muted md:flex">
           {links.map((l) =>
@@ -76,9 +77,10 @@ export default function Nav() {
             type="button"
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className="hidden rounded-full border border-border p-2 text-muted transition-colors hover:text-ink md:inline-flex"
+            className="theme-toggle hidden md:inline-flex"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            <Moon aria-hidden="true" />
+            <Sun aria-hidden="true" />
           </button>
           <a
             href="/HasanKhesro-CV.pdf"

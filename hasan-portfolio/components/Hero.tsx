@@ -6,7 +6,7 @@ import { profile } from "@/content/knowledge";
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-40 pb-28 md:pt-52 md:pb-36">
+    <section id="top" className="relative overflow-hidden pt-36 pb-20 md:pt-48 md:pb-28">
       {/* ambient network backdrop — the one deliberate motion moment */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <svg className="absolute inset-0 h-full w-full opacity-[0.35]" preserveAspectRatio="xMidYMid slice">
@@ -43,7 +43,11 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="container-px mx-auto max-w-6xl">
+      <div className="container-px relative mx-auto max-w-6xl">
+        <div className="mb-10 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-muted">
+          <span className="h-px w-10 bg-emerald" />
+          Full-stack engineer / AI builder
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +62,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
-          className="text-balance max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-ink md:text-6xl lg:text-[4.5rem]"
+          className="text-balance max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-ink md:text-7xl lg:text-[6.5rem]"
         >
           {profile.headline}
         </motion.h1>
@@ -67,7 +71,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="mt-6 max-w-2xl text-balance text-lg text-muted md:text-xl"
+          className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted md:text-xl"
         >
           {profile.subhead}
         </motion.p>
@@ -76,18 +80,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="mt-10 flex flex-wrap items-center gap-4"
+          className="mt-10 flex flex-wrap items-center gap-3"
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#201515] transition-transform hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3.5 text-sm font-semibold text-[#201515] transition-transform hover:-translate-y-0.5"
           >
             Explore Projects
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </a>
           <a
             href="#ai"
-            className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface/60 px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-emerald hover:text-emerald"
           >
             Ask Hasan AI
           </a>
