@@ -56,4 +56,46 @@ export const posts: Post[] = [
       "I don't think of the sales years as separate from the engineering ones. They're the same skill, applied to a different surface.",
     ],
   },
+  {
+    slug: "building-quietly-in-public",
+    title: "Building Quietly in Public",
+    excerpt:
+      "Why I started shipping personal projects in public, and what it taught me about learning faster than my comfort zone likes.",
+    tags: ["Build in Public", "Career"],
+    date: "2025-09-14",
+    body: [
+      "A lot of my best learning has come from building things without waiting for the perfect brief or perfect timing. ReWear Bahrain, the AI demos, and the smaller experiments I keep shipping all share the same core idea: don't wait for permission to learn in public.",
+      "The benefit isn't just showing progress — it's forcing clarity. When something has to work for a real person, the weak spots become obvious quickly. You find out whether the idea is useful, whether the experience is understandable, and whether the flow from 'idea' to 'used product' really exists.",
+      "I like shipping small enough that the risk is manageable and the feedback is honest. That's where the real growth happens: not in polished demos, but in messy products that teach you how to think better while you're building.",
+      "That mindset changed how I work. I now look for the thing I can build this week, test with real feedback, and improve with better judgment next week.",
+    ],
+  },
+  {
+    slug: "what-i-learned-from-leading-a-team",
+    title: "What I Learned From Leading a Team",
+    excerpt:
+      "The difference between being technically capable and being the person other people trust to carry a result forward.",
+    tags: ["Leadership", "Delivery"],
+    date: "2024-11-06",
+    body: [
+      "Leadership is not the same thing as being the loudest person in the room. A lot of the work is just creating enough clarity that the team can move without friction, and then helping the work stay grounded in what actually matters to the user or client.",
+      "At Zain Bahrain, I learned that leading people means understanding performance, coaching, and context. You can't push output by only focusing on targets; you have to help people see the problem clearly and fix the parts that are slowing them down. That lesson still informs how I work with engineers and stakeholders today.",
+      "The same is true in technical work. If the team doesn't agree on what success looks like, the project will drift into vague progress and late surprises. Good delivery is designed before it is delegated.",
+      "I value people who can keep momentum without losing detail, and I try to bring that same balance into my own work.",
+    ],
+  },
+  {
+    slug: "from-curiosity-to-technical-identity",
+    title: "From Curiosity to Technical Identity",
+    excerpt:
+      "How a childhood fascination with how things work turned into a career built around systems, AI, and product thinking.",
+    tags: ["Personal", "Career"],
+    date: "2023-06-21",
+    body: [
+      "I still remember the first time I had the feeling that technology was more than a tool — it was a way of understanding the world. I was curious about how things were built, how they failed, and how they could be improved. That instinct never really left me.",
+      "That foundation led to software engineering, then AI, then product work. Along the way, I learned that building things well isn't only about writing clean code. It's also about understanding the real-world problem, listening to the people affected by it, and designing something they can trust and use.",
+      "The path hasn't been linear, and I don't think it needs to be. A lot of what shaped my work was learning through people, platforms, and systems, not just through classwork or tutorials. That mix is what makes the work feel like mine.",
+      "The deeper I go into software and AI, the more I respect the part that isn't technical: the judgment, communication, and patience it takes to make a real thing happen.",
+    ],
+  },
 ];

@@ -5,14 +5,14 @@
 export const profile = {
   name: "Hasan Khesro",
   role: "Full-Stack Engineer & AI Builder",
-  location: "Muharraq, Bahrain",
+  location: "Bahrain",
   headline: "I build software that solves real problems.",
   subhead:
-    "Full-stack engineer, AI builder, and project lead. I turn ideas into production-ready solutions by combining engineering, artificial intelligence, and project ownership.",
+    "I move between engineering, product thinking, and AI delivery — turning rough ideas into systems people can actually use.",
   pitch:
-    "I build software from concept to production — and I've done it both ways: as the hands-on developer writing every line, and as the project coordinator aligning engineers, data scientists, and stakeholders on an AI system for a large industrial client. That range, deep technical execution plus real client and business experience, is what I bring to a team.",
-  email: "[redacted]",
-  phone: "+973 3697 9663",
+    "I build software from concept to production, and I enjoy the full loop: understanding the problem, shipping the product, and helping teams align around what matters. That mix of technical depth, product thinking, and delivery experience is what I bring to a project.",
+  email: "",
+  phone: "",
   linkedin: "https://www.linkedin.com/in/hasankhesro",
   github: "https://github.com/Hsn13",
 };
@@ -27,9 +27,9 @@ export const impact = [
 export const about = {
   eyebrow: "The person behind the products",
   paragraphs: [
-    "I've always liked understanding how things work — diagnosing whatever was wrong with a PC, curious enough to take the long way round just to see the mechanism. I first encountered AI in grade 2 and remember wondering when something like it would actually exist. That question stuck.",
-    "That curiosity turned into full-stack engineering, then into AI and automation, then into leading projects that connect technology with real business needs — coordinating a predictive-maintenance platform for an industrial client, building a peer-to-peer marketplace from scratch, and learning what actually matters to customers through years of direct sales and service roles.",
-    "Today I work across engineering, AI, and delivery — writing code, coordinating teams, and turning ideas into things people actually use.",
+    "I’ve always liked understanding how things work — taking apart old devices, learning the mechanics behind a system, and then trying to build something better from that understanding. I first encountered AI in grade school and remember thinking, 'When will this actually become real?' That question stayed with me.",
+    "That curiosity grew into full-stack engineering, then AI work, then product and delivery. I’ve coordinated a predictive-maintenance platform for a large industrial client, built a peer-to-peer marketplace from scratch, and learned a lot from direct sales and customer-facing roles about what people actually need, not just what they say they want.",
+    "Today I work across engineering, AI, and product thinking — writing code, leading delivery, and creating solutions that are useful enough to keep growing beyond a prototype.",
   ],
 };
 

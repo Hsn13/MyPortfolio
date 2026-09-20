@@ -24,12 +24,14 @@ export default function Contact() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={`mailto:${profile.email}`}
-            className="inline-flex items-center gap-2 rounded-full bg-emerald px-5 py-2.5 text-sm font-semibold text-[#04120d]"
-          >
-            <Mail className="h-4 w-4" /> Email
-          </a>
+          {profile.email ? (
+            <a
+              href={`mailto:${profile.email}`}
+              className="inline-flex items-center gap-2 rounded-full bg-emerald px-5 py-2.5 text-sm font-semibold text-[#04120d]"
+            >
+              <Mail className="h-4 w-4" /> Email
+            </a>
+          ) : null}
           <a
             href={profile.linkedin}
             target="_blank"
