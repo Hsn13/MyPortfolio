@@ -11,7 +11,7 @@ export const profile = {
     "Full-stack engineer, AI builder, and project lead. I turn ideas into production-ready solutions by combining engineering, artificial intelligence, and project ownership.",
   pitch:
     "I build software from concept to production — and I've done it both ways: as the hands-on developer writing every line, and as the project coordinator aligning engineers, data scientists, and stakeholders on an AI system for a large industrial client. That range, deep technical execution plus real client and business experience, is what I bring to a team.",
-  email: "hkhosro5@gmail.com",
+  email: "[redacted]",
   phone: "+973 3697 9663",
   linkedin: "https://www.linkedin.com/in/hasankhesro",
   github: "https://github.com/Hsn13",
