@@ -4,8 +4,8 @@
     .icon-border { fill: none; stroke: #34343a; }
     .icon-mark { fill: #ff6a2a; }
     @media (prefers-color-scheme: light) {
-      .icon-bg { fill: #f4f4f9; }
-      .icon-border { stroke: #1a1a1d; }
+      .icon-bg { fill: #1a1a1d; }
+      .icon-border { stroke: #f4f4f9; }
       .icon-mark { fill: #e34f00; }
     }
   </style>
