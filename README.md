@@ -1,8 +1,13 @@
 # Hasan Khesro Portfolio
 
-This repository contains the portfolio website and two separate public demo applications.
+A simple, personal portfolio built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
 
-## Portfolio app
+## Structure
+
+- `hasan-portfolio/` — main portfolio app
+- `.github/` — repository guidance for development and review
+
+## Local setup
 
 ```bash
 cd hasan-portfolio
@@ -11,23 +16,17 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open <http://localhost:3000>. Validate with:
+Then open http://localhost:3000
+
+## Validation
 
 ```bash
 npm run lint
 npm run build
-npm audit
 ```
 
-## Public demos
+## Notes
 
-- [VERDÉ AI commerce demo](https://github.com/Hsn13/verde-ai-commerce-demo)
-- [Roamwise AI travel assistant demo](https://github.com/Hsn13/ai-travel-assistant-demo)
-
-Each demo is an original, self-contained portfolio demonstration using synthetic local data. The industrial predictive-maintenance and government committee projects remain represented only by sanitized portfolio descriptions; no confidential code or data is published.
-
-## Repository layout
-
-- `hasan-portfolio/` — Next.js portfolio application.
-- `.github/` — Copilot instructions and UI/doctor prompts.
-- `generated-projects/` — local-only working copies of the separate demo repositories; ignored by the root repository.
+- The portfolio is intentionally public-facing and limited to non-confidential work.
+- Public content is sourced from the app’s knowledge layer and should stay consistent with the site.
+- Contributions are not required or expected for this personal project.

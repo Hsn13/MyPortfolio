@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 
 const links = [
   { href: "/#projects", label: "Projects" },
@@ -15,6 +15,16 @@ const links = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") return "dark";
+    const storedTheme = window.localStorage.getItem("theme");
+    if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -29,6 +39,13 @@ export default function Nav() {
     };
   }, [menuOpen]);
 
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    window.localStorage.setItem("theme", nextTheme);
+  };
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -37,7 +54,7 @@ export default function Nav() {
         scrolled ? "bg-bg/85 backdrop-blur border-b border-border" : "bg-transparent"
       }`}
     >
-      <nav className="container-px mx-auto max-w-7xl flex items-center justify-between h-16">
+      <nav className="container-px mx-auto flex h-16 max-w-7xl items-center justify-between">
         <Link href="/#top" className="font-display font-semibold tracking-tight text-ink">
           Hasan Khesro
         </Link>
@@ -55,6 +72,14 @@ export default function Nav() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="hidden rounded-full border border-border p-2 text-muted transition-colors hover:text-ink md:inline-flex"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <a
             href="/HasanKhesro-CV.pdf"
             className="hidden rounded-full border border-emerald/40 px-4 py-2 text-sm font-medium text-emerald transition-colors hover:bg-emerald hover:text-[#04120d] md:block"
@@ -97,13 +122,26 @@ export default function Nav() {
                 </a>
               )
             )}
-            <a
-              href="/HasanKhesro-CV.pdf"
-              onClick={closeMenu}
-              className="mt-2 rounded-lg border border-emerald/40 px-3 py-3 font-medium text-emerald"
-            >
-              Download CV
-            </a>
+            <div className="mt-2 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  toggleTheme();
+                  closeMenu();
+                }}
+                className="flex items-center gap-2 rounded-lg border border-border px-3 py-3 text-left text-muted"
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === "dark" ? "Light mode" : "Dark mode"}
+              </button>
+              <a
+                href="/HasanKhesro-CV.pdf"
+                onClick={closeMenu}
+                className="rounded-lg border border-emerald/40 px-3 py-3 font-medium text-emerald"
+              >
+                Download CV
+              </a>
+            </div>
           </div>
         </div>
       )}
