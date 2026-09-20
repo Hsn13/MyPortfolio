@@ -56,7 +56,7 @@ export default function Nav() {
     >
       <nav className="container-px mx-auto flex h-16 max-w-7xl items-center justify-between">
         <Link href="/#top" className="group flex items-center gap-3 font-display font-semibold tracking-tight text-ink">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald text-sm text-[#201515]">H</span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald text-[10px] font-bold tracking-[-0.08em] text-[#201515]">HK</span>
           <span>Hasan Khesro</span>
         </Link>
         <div className="hidden items-center gap-8 text-sm text-muted md:flex">
