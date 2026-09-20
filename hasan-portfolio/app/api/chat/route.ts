@@ -154,6 +154,7 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
+    const geminiApiKey = apiKey;
 
     // Gemini's REST API (free tier via Google AI Studio: https://aistudio.google.com/apikey)
     const contents = messages.map((m) => ({
@@ -171,7 +172,7 @@ export async function POST(req: NextRequest) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + apiKey,
+            "x-goog-api-key": geminiApiKey,
           },
           body: JSON.stringify({
             system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
@@ -223,6 +224,13 @@ export async function POST(req: NextRequest) {
       if (res.status === 503) {
         return NextResponse.json(
           { reply: "Google's AI service is under heavy load right now — please try again in a few seconds." },
+          { status: 200 }
+        );
+      }
+
+      if (res.status === 401 || res.status === 403) {
+        return NextResponse.json(
+          { reply: "The AI assistant is temporarily unavailable. Please try again later." },
           { status: 200 }
         );
       }
