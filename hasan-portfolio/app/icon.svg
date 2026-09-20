@@ -1,5 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="16" fill="#0b0b0d"/>
-  <rect x="3" y="3" width="58" height="58" rx="13" fill="none" stroke="#34343a" stroke-width="2"/>
-  <text x="8" y="44" fill="#ff6a2a" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="-3">HK .</text>
+  <style>
+    .icon-bg { fill: #0b0b0d; }
+    .icon-border { fill: none; stroke: #34343a; }
+    .icon-mark { fill: #ff6a2a; }
+    @media (prefers-color-scheme: light) {
+      .icon-bg { fill: #f4f4f9; }
+      .icon-border { stroke: #1a1a1d; }
+      .icon-mark { fill: #e34f00; }
+    }
+  </style>
+  <rect class="icon-bg" width="64" height="64" rx="20"/>
+  <rect class="icon-border" x="3" y="3" width="58" height="58" rx="13" stroke-width="2.5"/>
+  <text class="icon-mark" x="5" y="44" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" letter-spacing="-3">HK .</text>
 </svg>
