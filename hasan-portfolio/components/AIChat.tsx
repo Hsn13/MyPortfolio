@@ -101,7 +101,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                m.role === "user" ? "bg-emerald text-[#04120d]" : "bg-surface border border-border text-ink"
+                m.role === "user" ? "bg-emerald text-[#201515]" : "bg-surface border border-border text-ink"
               }`}
             >
               {m.content}
@@ -132,7 +132,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           type="submit"
           disabled={loading}
           aria-label="Send"
-          className="rounded-full bg-emerald p-2.5 text-[#04120d] disabled:opacity-50"
+          className="rounded-full bg-emerald p-2.5 text-[#201515] disabled:opacity-50"
         >
           <Send className="h-4 w-4" />
         </button>
@@ -156,7 +156,7 @@ export default function AIChat() {
           </p>
           <button
             onClick={() => setOpen(true)}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#04120d]"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#201515]"
           >
             <MessageCircle className="h-4 w-4" />
             Start a conversation
@@ -169,7 +169,7 @@ export default function AIChat() {
         aria-label="Toggle Ask Hasan AI"
         aria-expanded={open}
         aria-controls={open ? "ai-chat-dialog" : undefined}
-        className="fixed bottom-6 right-4 z-50 flex items-center gap-2 rounded-full bg-emerald px-5 py-3.5 text-sm font-semibold text-[#04120d] shadow-lg md:right-6"
+        className="fixed bottom-6 right-4 z-50 flex items-center gap-2 rounded-full bg-emerald px-5 py-3.5 text-sm font-semibold text-[#201515] shadow-lg md:right-6"
       >
         <MessageCircle className="h-4 w-4" />
         Ask Hasan AI

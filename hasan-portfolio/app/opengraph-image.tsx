@@ -8,8 +8,8 @@ export default function OpenGraphImage() {
   return new ImageResponse(
     <div
       style={{
-        background: "#08090c",
-        color: "#f4f6f8",
+        background: "#fffefb",
+        color: "#201515",
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -18,14 +18,14 @@ export default function OpenGraphImage() {
         width: "100%",
       }}
     >
-      <div style={{ color: "#12b886", display: "flex", fontSize: 28, fontWeight: 600 }}>
+      <div style={{ color: "#ff4f00", display: "flex", fontSize: 28, fontWeight: 600 }}>
         HASAN KHESRO
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div style={{ display: "flex", fontSize: 70, fontWeight: 700, letterSpacing: -3 }}>
           Full-Stack Engineer
         </div>
-        <div style={{ color: "#9aa3af", display: "flex", fontSize: 32 }}>
+        <div style={{ color: "#6f6b60", display: "flex", fontSize: 32 }}>
           Building AI-driven products from idea to production.
         </div>
       </div>

@@ -40,7 +40,7 @@ export default function ProjectVisual({
       <svg className="absolute inset-0 h-full w-full opacity-[0.25]" preserveAspectRatio="xMidYMid slice">
         <defs>
           <pattern id={patternId} width="24" height="24" patternUnits="userSpaceOnUse">
-            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#23262f" strokeWidth="1" />
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#c5c0b1" strokeWidth="1" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill={`url(#${patternId})`} />

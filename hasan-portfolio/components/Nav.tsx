@@ -82,7 +82,7 @@ export default function Nav() {
           </button>
           <a
             href="/HasanKhesro-CV.pdf"
-            className="hidden rounded-full border border-emerald/40 px-4 py-2 text-sm font-medium text-emerald transition-colors hover:bg-emerald hover:text-[#04120d] md:block"
+            className="hidden rounded-full border border-emerald/40 px-4 py-2 text-sm font-medium text-emerald transition-colors hover:bg-emerald hover:text-[#201515] md:block"
           >
             Download CV
           </a>

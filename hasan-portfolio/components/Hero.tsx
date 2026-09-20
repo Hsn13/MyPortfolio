@@ -12,8 +12,8 @@ export default function Hero() {
         <svg className="absolute inset-0 h-full w-full opacity-[0.35]" preserveAspectRatio="xMidYMid slice">
           <defs>
             <radialGradient id="fade" cx="50%" cy="35%" r="60%">
-              <stop offset="0%" stopColor="#12b886" stopOpacity="0.14" />
-              <stop offset="100%" stopColor="#08090c" stopOpacity="0" />
+              <stop offset="0%" stopColor="#ff4f00" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#fffefb" stopOpacity="0" />
             </radialGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#fade)" />
@@ -36,7 +36,7 @@ export default function Hero() {
               y1={`${l.y1}%`}
               x2={`${l.x2}%`}
               y2={`${l.y2}%`}
-              stroke="#23262f"
+              stroke="#c5c0b1"
               strokeWidth="1"
             />
           ))}
@@ -80,7 +80,7 @@ export default function Hero() {
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#04120d] transition-transform hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-[#201515] transition-transform hover:-translate-y-0.5"
           >
             Explore Projects
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -104,14 +104,14 @@ export default function Hero() {
 }
 
 const NODES = [
-  { x: 12, y: 20, r: 2.5, color: "#12b886", dur: 5, delay: 0 },
-  { x: 28, y: 12, r: 1.8, color: "#3b82f6", dur: 6, delay: 0.4 },
-  { x: 46, y: 24, r: 2.2, color: "#12b886", dur: 7, delay: 0.8 },
-  { x: 63, y: 10, r: 1.6, color: "#3b82f6", dur: 5.5, delay: 1.2 },
-  { x: 78, y: 22, r: 2.4, color: "#12b886", dur: 6.5, delay: 0.2 },
-  { x: 88, y: 14, r: 1.8, color: "#3b82f6", dur: 8, delay: 0.6 },
-  { x: 20, y: 34, r: 1.6, color: "#3b82f6", dur: 7.5, delay: 1 },
-  { x: 55, y: 36, r: 2, color: "#12b886", dur: 6, delay: 1.4 },
+  { x: 12, y: 20, r: 2.5, color: "#ff4f00", dur: 5, delay: 0 },
+  { x: 28, y: 12, r: 1.8, color: "#36342e", dur: 6, delay: 0.4 },
+  { x: 46, y: 24, r: 2.2, color: "#ff4f00", dur: 7, delay: 0.8 },
+  { x: 63, y: 10, r: 1.6, color: "#36342e", dur: 5.5, delay: 1.2 },
+  { x: 78, y: 22, r: 2.4, color: "#ff4f00", dur: 6.5, delay: 0.2 },
+  { x: 88, y: 14, r: 1.8, color: "#36342e", dur: 8, delay: 0.6 },
+  { x: 20, y: 34, r: 1.6, color: "#36342e", dur: 7.5, delay: 1 },
+  { x: 55, y: 36, r: 2, color: "#ff4f00", dur: 6, delay: 1.4 },
 ];
 
 const LINES = [

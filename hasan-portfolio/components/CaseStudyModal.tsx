@@ -75,7 +75,7 @@ export default function CaseStudyModal({
                     href={project.links.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-[#04120d]"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-[#201515]"
                   >
                     Live Demo <ArrowUpRight className="h-3.5 w-3.5" />
                   </a>
