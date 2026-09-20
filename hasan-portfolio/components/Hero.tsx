@@ -18,7 +18,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="top" className="hero-stage relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-24">
+    <section id="top" className="hero-stage relative overflow-hidden pt-28 pb-12 md:pt-32 md:pb-16">
       {/* ambient network backdrop — the one deliberate motion moment */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <svg className="absolute inset-0 h-full w-full opacity-[0.35]" preserveAspectRatio="xMidYMid slice">
@@ -56,12 +56,12 @@ export default function Hero() {
       </div>
 
       <div className="container-px relative mx-auto max-w-7xl">
-        <div className="mb-12 flex items-center justify-between border-b border-border/70 pb-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted">
+        <div className="mb-8 flex items-center justify-between border-b border-border/70 pb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted">
           <span className="flex items-center gap-2"><span className="live-dot" /> Available for select opportunities</span>
           <span className="hidden items-center gap-3 md:flex"><MapPin className="h-3.5 w-3.5 text-emerald" /> {profile.location} <span className="text-border">/</span> {time || "—"} local time</span>
         </div>
 
-        <div className="grid items-center gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:gap-8">
+        <div className="grid items-center gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:gap-4">
           <div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="mb-6 flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-emerald">
               <Sparkles className="h-3.5 w-3.5" /> Full-stack engineer / AI builder
@@ -70,11 +70,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.05 }}
-              className="text-balance max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[-0.07em] text-ink md:text-7xl lg:text-[7.5rem]"
+              className="text-balance max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[-0.07em] text-ink md:text-7xl lg:text-[6.5rem]"
             >
               {profile.headline}
             </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.18 }} className="mt-8 max-w-xl text-balance text-lg leading-relaxed text-muted md:text-xl">
+            <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.18 }} className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-muted md:text-xl">
               {profile.subhead}
             </motion.p>
           </div>
@@ -85,7 +85,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="mt-10 flex flex-wrap items-center gap-3"
+          className="mt-7 flex flex-wrap items-center gap-3"
         >
           <a
             href="#projects"

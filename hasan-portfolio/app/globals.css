@@ -113,7 +113,7 @@ h1, h2, h3, h4 {
 }
 
 .hero-stage {
-  min-height: min(900px, 100svh);
+  min-height: auto;
 }
 
 .chapter-break {
@@ -161,9 +161,9 @@ h1, h2, h3, h4 {
 .systems-orb {
   position: relative;
   display: grid;
-  height: min(44vw, 500px);
-  min-height: 330px;
-  min-width: 330px;
+  height: min(36vw, 390px);
+  min-height: 280px;
+  min-width: 280px;
   place-items: center;
   perspective: 900px;
   transform-style: preserve-3d;
@@ -275,8 +275,7 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 767px) {
-  .hero-stage { min-height: auto; }
-  .systems-orb { height: 340px; min-height: 340px; min-width: 100%; }
+  .systems-orb { height: 270px; min-height: 270px; min-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
