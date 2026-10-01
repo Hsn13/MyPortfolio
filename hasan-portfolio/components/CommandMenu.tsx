@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileDown, FolderGit2, MessageCircle, Mail, Compass, Newspaper, Command } from "lucide-react";
+import { FolderGit2, MessageCircle, Mail, Compass, Newspaper, Command } from "lucide-react";
 
 type Item = {
   id: string;
@@ -55,16 +55,6 @@ export default function CommandMenu() {
       { id: "ai", label: "Ask Hasan AI", hint: "Open the assistant", icon: MessageCircle, action: () => goto("#ai") },
       { id: "blog", label: "Read the Engineering Journal", hint: "Go to /blog", icon: Newspaper, action: () => { router.push("/blog"); setOpen(false); } },
       { id: "contact", label: "Contact Hasan", hint: "Go to section", icon: Mail, action: () => goto("#contact") },
-      {
-        id: "cv",
-        label: "Download CV",
-        hint: "Open PDF",
-        icon: FileDown,
-        action: () => {
-          window.open("/HasanKhesro-CV.pdf", "_blank");
-          setOpen(false);
-        },
-      },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router]

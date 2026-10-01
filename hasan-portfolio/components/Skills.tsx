@@ -1,59 +1,84 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { skills, certifications, education } from "@/content/knowledge";
+import { motion, useReducedMotion } from "framer-motion";
+import { certifications, education, skills } from "@/content/knowledge";
+import SectionKicker from "@/components/SectionKicker";
 
 export default function Skills() {
-  return (
-    <section className="border-t border-border py-24 md:py-32">
-      <div className="container-px mx-auto max-w-6xl grid gap-16 lg:grid-cols-[1.3fr_1fr]">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Capabilities</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Skills & technology</h2>
+  const reduceMotion = useReducedMotion();
 
-          <div className="mt-10 space-y-8">
-            {Object.entries(skills).map(([category, items], i) => (
-              <motion.div
+  return (
+    <section id="capabilities" className="capabilities-section py-24 md:py-32">
+      <div className="container-px mx-auto max-w-6xl">
+        <header className="capabilities-heading">
+          <div>
+            <SectionKicker label="THE TOOLKIT" detail="TOOLS ARE ONLY THE START" />
+            <h2 className="portfolio-section-title">What I reach for<br /><em>when it matters.</em></h2>
+          </div>
+          <p>Range matters. So does knowing which tool belongs to which problem—and when the work is about people, not software.</p>
+        </header>
+
+        <div className="capabilities-layout">
+          <div className="capability-stack">
+            {Object.entries(skills).map(([category, items], index) => (
+              <motion.article
                 key={category}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
+                initial={reduceMotion ? false : { opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+                transition={{ duration: 0.55, delay: index * 0.06 }}
+                className="capability-group"
               >
-                <h3 className="text-sm font-semibold text-emerald">{category}</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {items.map((s) => (
-                    <span key={s} className="rounded-full border border-border px-3 py-1.5 text-sm text-muted">
-                      {s}
-                    </span>
+                <div className="capability-group__heading">
+                  <h3>{category}</h3>
+                </div>
+                <div className="capability-group__items">
+                  {items.map((skill) => (
+                    <span key={skill} className="capability-chip">{skill}</span>
                   ))}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Credentials</p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink">Education & certifications</h2>
-
-          <div className="mt-8 space-y-4">
-            {education.map((e) => (
-              <div key={e.degree} className="border-b border-border pb-4">
-                <p className="text-sm font-medium text-ink">{e.degree}</p>
-                <p className="mt-0.5 text-xs text-muted">{e.org} · {e.when}</p>
-              </div>
+              </motion.article>
             ))}
           </div>
 
-          <div className="mt-8 space-y-4">
-            {certifications.map((c) => (
-              <div key={c.name} className="border-b border-border pb-4">
-                <p className="text-sm font-medium text-ink">{c.name}</p>
-                <p className="mt-0.5 text-xs text-muted">{c.org} · {c.year}</p>
-              </div>
-            ))}
-          </div>
+          <aside className="credentials-panel">
+            <div className="credentials-panel__heading">
+              <span>THE LEARNING LOG</span>
+              <i />
+            </div>
+            <div className="credentials-panel__section">
+              <h3>Education</h3>
+              <ol className="credential-list">
+                {education.map((item, index) => (
+                  <li key={item.degree}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <div>
+                      <strong>{item.degree}</strong>
+                      <p>{item.org}</p>
+                      <small>{item.when}</small>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="credentials-panel__section">
+              <h3>Certifications</h3>
+              <ol className="credential-list credential-list--certifications">
+                {certifications.map((item) => (
+                  <li key={item.name}>
+                    <span>{item.year}</span>
+                    <div>
+                      <strong>{item.name}</strong>
+                      <p>{item.org}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="credentials-panel__stamp" aria-hidden="true">
+              <span>LEARN</span><i>↗</i><span>APPLY</span><i>↗</i><span>REPEAT</span>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

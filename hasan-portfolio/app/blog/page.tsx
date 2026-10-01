@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Contact from "@/components/Contact";
+import SectionKicker from "@/components/SectionKicker";
 import { posts } from "@/content/posts";
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export default function BlogIndex() {
       <Nav />
       <section className="pt-40 pb-24 md:pt-52">
         <div className="container-px mx-auto max-w-3xl">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Writing</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink md:text-5xl">Engineering Journal</h1>
+          <SectionKicker label="THE WRITING DESK" detail="ENGINEERING / AI / PRODUCT" />
+          <h1 className="portfolio-section-title mt-4">Ideas, in <em>practice.</em></h1>
           <p className="mt-4 max-w-xl text-muted">
             Notes on building products, coordinating AI delivery, and what customer-facing work taught me about
             engineering.

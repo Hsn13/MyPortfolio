@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import SectionKicker from "@/components/SectionKicker";
 import { MessageCircle, X, Send, Loader2, Sparkles, ArrowUpRight } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -17,6 +18,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -37,8 +39,14 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+    const timer = window.setTimeout(() => setCooldownSeconds((seconds) => seconds - 1), 1000);
+    return () => window.clearTimeout(timer);
+  }, [cooldownSeconds]);
+
   async function send(text: string) {
-    if (!text.trim() || loading) return;
+    if (!text.trim() || loading || cooldownSeconds > 0) return;
     const next: Msg[] = [...messages, { role: "user", content: text }];
     setMessages(next);
     setInput("");
@@ -49,8 +57,11 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: next }),
       });
-      const data = await res.json();
+      const data: { reply?: string } = await res.json();
       setMessages((m) => [...m, { role: "assistant", content: data.reply ?? "Something went wrong — try again." }]);
+      if (res.status === 429 || res.status === 503) {
+        setCooldownSeconds(Number(res.headers.get("Retry-After")) || 5);
+      }
     } catch {
       setMessages((m) => [...m, { role: "assistant", content: "I couldn't reach the server. Try again in a moment." }]);
     } finally {
@@ -70,17 +81,17 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       aria-labelledby="ai-chat-title"
       className="fixed bottom-24 right-4 z-50 flex h-[min(680px,calc(100dvh-7rem))] w-[calc(100vw-2rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:right-8"
     >
-      <div className="relative overflow-hidden border-b border-border bg-emerald px-5 py-5 text-[#201515]">
-        <div className="absolute -right-5 -top-8 h-28 w-28 rounded-full border border-[#201515]/20" />
+      <div className="ai-chat-header relative overflow-hidden border-b border-border bg-emerald px-5 py-5 text-emerald-deep">
+        <div className="absolute -right-5 -top-8 h-28 w-28 rounded-full border border-emerald-deep/20" />
         <div className="relative flex items-start justify-between">
           <div>
             <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em]">
               <Sparkles className="h-3.5 w-3.5" /> Signature assistant
             </div>
             <p id="ai-chat-title" className="text-lg font-semibold">Ask Hasan AI</p>
-            <p className="mt-1 max-w-[15rem] text-xs text-[#201515]/70">Grounded in his real projects & experience</p>
+            <p className="mt-1 max-w-[15rem] text-xs text-emerald-deep/70">Grounded in his real projects & experience</p>
           </div>
-          <button ref={closeRef} onClick={onClose} aria-label="Close chat" className="rounded-full p-2 text-[#201515]/70 transition-colors hover:bg-[#201515]/10 hover:text-[#201515]">
+          <button ref={closeRef} onClick={onClose} aria-label="Close chat" className="rounded-full p-2 text-emerald-deep/70 transition-colors hover:bg-emerald-deep/10 hover:text-emerald-deep">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -107,7 +118,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                m.role === "user" ? "bg-emerald text-[#201515]" : "bg-surface border border-border text-ink"
+                m.role === "user" ? "bg-emerald text-emerald-deep" : "bg-surface border border-border text-ink"
               }`}
             >
               {m.content}
@@ -116,8 +127,13 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
         ))}
         {loading && (
           <div className="flex items-center gap-2 text-xs text-muted">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Thinking…
+            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Thinking… your message is being processed.
           </div>
+        )}
+        {cooldownSeconds > 0 && (
+          <p role="status" className="text-xs text-muted">
+            The assistant is busy. You can try again in {cooldownSeconds} seconds.
+          </p>
         )}
       </div>
 
@@ -132,13 +148,15 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about a project, skill, or role fit…"
+          disabled={cooldownSeconds > 0}
+          aria-label="Message Hasan AI"
           className="flex-1 rounded-full border border-border bg-bg px-4 py-2.5 text-sm text-ink outline-none focus:border-emerald"
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || cooldownSeconds > 0}
           aria-label="Send"
-          className="rounded-full bg-emerald p-2.5 text-[#201515] disabled:opacity-50"
+          className="rounded-full bg-emerald p-2.5 text-emerald-deep disabled:opacity-50"
         >
           <Send className="h-4 w-4" />
         </button>
@@ -155,19 +173,17 @@ export default function AIChat() {
       <section id="ai" className="border-t border-border py-24 md:py-32">
         <div className="container-px mx-auto max-w-4xl">
           <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-8 text-left md:p-12">
-            <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full border border-emerald/30" />
+            <div className="ai-chat-orbit absolute -right-24 -top-24 h-64 w-64 rounded-full border border-emerald/30" />
             <div className="relative max-w-2xl">
-              <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-emerald">
-                <Sparkles className="h-3.5 w-3.5" /> Signature feature
-              </p>
+              <SectionKicker label="SIGNATURE FEATURE" detail="A PROFILE, WITH DEPTH" />
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink md:text-5xl">Ask Hasan AI</h2>
               <p className="mt-4 max-w-xl text-muted">
                 A live assistant grounded only in Hasan&apos;s real projects, experience, and skills — ask it what a
-                resume cannot answer.
+                quick profile cannot answer.
               </p>
               <button
                 onClick={() => setOpen(true)}
-                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3 text-sm font-semibold text-[#201515]"
+                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3 text-sm font-semibold text-emerald-deep"
               >
                 <MessageCircle className="h-4 w-4" />
                 Start a conversation
@@ -185,9 +201,9 @@ export default function AIChat() {
         aria-label="Toggle Ask Hasan AI"
         aria-expanded={open}
         aria-controls={open ? "ai-chat-dialog" : undefined}
-        className="fixed bottom-6 right-4 z-50 flex items-center gap-3 rounded-2xl border border-[#201515]/15 bg-emerald px-4 py-3 text-left text-[#201515] shadow-[0_14px_40px_rgba(255,106,42,0.28)] transition-transform hover:-translate-y-1 md:bottom-8 md:right-8"
+        className="ai-chat-launcher fixed bottom-6 right-4 z-50 flex items-center gap-3 rounded-2xl border border-emerald/30 bg-emerald px-4 py-3 text-left text-emerald-deep transition-transform hover:-translate-y-1 md:bottom-8 md:right-8"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#201515]/10"><MessageCircle className="h-4 w-4" /></span>
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-deep/10"><MessageCircle className="h-4 w-4" /></span>
         <span className="flex flex-col">
           <span className="text-[10px] font-bold uppercase tracking-[0.18em]">Available now</span>
           <span className="text-sm font-semibold">{open ? "Close assistant" : "Ask Hasan AI"}</span>

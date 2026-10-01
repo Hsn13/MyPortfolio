@@ -1,26 +1,34 @@
 "use client";
 
-import { motion, useInView, animate } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion, useInView, animate, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { impact } from "@/content/knowledge";
+import SectionKicker from "@/components/SectionKicker";
 
 function Metric({ value, label, detail, i }: { value: string; label: string; detail: string; i: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [display, setDisplay] = useState("0");
+  const inView = useInView(ref, { once: true, amount: 0.25, margin: "0px 0px -10% 0px" });
+  const reduceMotion = useReducedMotion();
+  const count = useMotionValue(0);
+  const numeric = parseFloat(value.replace(/[^0-9.]/g, ""));
+  const suffix = value.replace(/[0-9.]/g, "");
+  const display = useTransform(count, (current) =>
+    `${value.includes(".") ? current.toFixed(1) : Math.round(current)}${suffix}`
+  );
 
   useEffect(() => {
     if (!inView) return;
-    const numeric = parseFloat(value.replace(/[^0-9.]/g, ""));
-    const suffix = value.replace(/[0-9.]/g, "");
-    const controls = animate(0, numeric, {
+    if (reduceMotion) {
+      count.set(numeric);
+      return;
+    }
+    const controls = animate(count, numeric, {
       duration: 1.4,
       delay: i * 0.1,
       ease: "easeOut",
-      onUpdate: (v) => setDisplay(`${value.includes(".") ? v.toFixed(1) : Math.round(v)}${suffix}`),
     });
     return () => controls.stop();
-  }, [inView, value, i]);
+  }, [count, inView, i, numeric, reduceMotion]);
 
   return (
     <div
@@ -29,7 +37,10 @@ function Metric({ value, label, detail, i }: { value: string; label: string; det
       aria-describedby={`metric-detail-${i}`}
       className="group relative border-t border-border py-6 outline-none first:border-t-0 focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-emerald md:border-t-0 md:border-l md:py-2 md:pl-6 md:first:border-l-0 md:first:pl-0"
     >
-      <div className="font-display text-4xl font-semibold text-ink md:text-5xl">{display}</div>
+      <div className="font-display text-4xl font-semibold text-ink md:text-5xl">
+        <span className="sr-only">{value}</span>
+        <motion.span aria-hidden="true">{display}</motion.span>
+      </div>
       <div className="mt-1 text-sm font-medium text-muted">{label}</div>
       <div
         id={`metric-detail-${i}`}
@@ -46,7 +57,7 @@ export default function ImpactDashboard() {
     <section className="border-y border-border bg-surface/60">
       <div className="container-px mx-auto max-w-6xl py-14">
         <div className="mb-8 flex items-center justify-between">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Evidence, not claims</p>
+          <SectionKicker label="EVIDENCE, NOT CLAIMS" detail="THE RECEIPTS" />
         </div>
         <motion.div
           initial={{ opacity: 0 }}

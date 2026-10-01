@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import MotionProvider from "@/components/MotionProvider";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hasankhesro.com"),
+  metadataBase: new URL("https://my-portfolio-six-wheat-43.vercel.app"),
   title: "Hasan Khesro | Full-Stack Engineer & AI Builder",
   description:
     "Hasan Khesro is a Bahrain-based software engineer building full-stack applications, AI solutions, and digital products from concept to production.",
@@ -38,9 +39,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${jakarta.variable}`}>
       <body className="antialiased">
         <MotionProvider>{children}</MotionProvider>
+        <CustomCursor />
         <Analytics />
       </body>
     </html>

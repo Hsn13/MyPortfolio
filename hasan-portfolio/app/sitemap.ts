@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { posts } from "@/content/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://hasankhesro.com";
+  const baseUrl = "https://my-portfolio-six-wheat-43.vercel.app";
   const latestPostDate = posts.reduce(
     (latest, post) => (post.date > latest ? post.date : latest),
     posts[0]?.date ?? "2023-01-01"

@@ -66,7 +66,7 @@ export default function CaseStudyModal({
               <span className="text-xs font-medium uppercase tracking-widest text-emerald">{project.category}</span>
               <h3 id="case-study-title" className="mt-3 font-display text-2xl font-semibold text-ink md:text-3xl">{project.name}</h3>
               <p className="mt-1 text-sm text-muted">{project.role}</p>
-              <ProjectVisual screenshot={project.screenshot} name={project.name} className="mt-5 aspect-[16/9] w-full" />
+              <ProjectVisual projectId={project.id} screenshot={project.screenshot} name={project.name} className="mt-5 aspect-[16/9] w-full" />
               <p className="mt-5 text-base leading-relaxed text-ink">{project.heroStatement}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -75,7 +75,7 @@ export default function CaseStudyModal({
                     href={project.links.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-[#201515]"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-emerald px-4 py-2 text-xs font-semibold text-emerald-deep"
                   >
                     Live Demo <ArrowUpRight className="h-3.5 w-3.5" />
                   </a>

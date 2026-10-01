@@ -55,9 +55,8 @@ export default function Nav() {
       }`}
     >
       <nav className="container-px mx-auto flex h-16 max-w-7xl items-center justify-between">
-        <Link href="/#top" className="group flex items-center gap-3 font-display font-semibold tracking-tight text-ink">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald text-[10px] font-bold tracking-[-0.08em] text-[#201515]">HK</span>
-          <span>Hasan Khesro</span>
+        <Link href="/#top" className="site-wordmark group">
+          Hasan Khesro
         </Link>
         <div className="hidden items-center gap-8 text-sm text-muted md:flex">
           {links.map((l) =>
@@ -82,12 +81,6 @@ export default function Nav() {
             <Moon aria-hidden="true" />
             <Sun aria-hidden="true" />
           </button>
-          <a
-            href="/HasanKhesro-CV.pdf"
-            className="hidden rounded-full border border-emerald/40 px-4 py-2 text-sm font-medium text-emerald transition-colors hover:bg-emerald hover:text-[#201515] md:block"
-          >
-            Download CV
-          </a>
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
@@ -136,13 +129,6 @@ export default function Nav() {
                 {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 {theme === "dark" ? "Light mode" : "Dark mode"}
               </button>
-              <a
-                href="/HasanKhesro-CV.pdf"
-                onClick={closeMenu}
-                className="rounded-lg border border-emerald/40 px-3 py-3 font-medium text-emerald"
-              >
-                Download CV
-              </a>
             </div>
           </div>
         </div>

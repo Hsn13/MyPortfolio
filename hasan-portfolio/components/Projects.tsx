@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { projects, sideProjects, type Project } from "@/content/knowledge";
 import CaseStudyModal from "@/components/CaseStudyModal";
-import ProjectVisual from "@/components/ProjectVisual";
+import ProjectCard from "@/components/ProjectCard";
+import SectionKicker from "@/components/SectionKicker";
 
 export default function Projects() {
   const [active, setActive] = useState<Project | null>(null);
@@ -14,78 +14,49 @@ export default function Projects() {
   return (
     <section id="projects" className="py-24 md:py-32">
       <div className="container-px mx-auto max-w-7xl">
-        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div className="project-heading mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <p className="text-xs font-medium uppercase tracking-widest text-emerald">Selected systems / 01—05</p>
-            <h2 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-ink md:text-6xl">Built, not just coded</h2>
+            <SectionKicker label="FIELD NOTES" detail="FIVE BUILDS / PRODUCT TOOLS" />
+            <h2 className="portfolio-section-title mt-3">Things that <em>move</em> people.</h2>
           </div>
-          <p className="max-w-xs text-sm leading-relaxed text-muted">A small selection of products, platforms, and experiments where engineering meets useful outcomes.</p>
+          <p className="max-w-xs text-sm leading-relaxed text-muted">Products, platforms, and experiments shaped around the people who use them—not the tech for its own sake.</p>
         </div>
 
-        {/* Flagship — large card */}
-        <motion.button
-          type="button"
-          onClick={() => setActive(flagship)}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="group relative block w-full overflow-hidden rounded-[2rem] border border-border bg-surface p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-emerald/60 hover:shadow-[0_28px_80px_rgba(0,0,0,0.12)] md:p-10"
-        >
-          <span className="text-xs font-medium uppercase tracking-widest text-emerald">{flagship.category}</span>
-          <ProjectVisual screenshot={flagship.screenshot} name={flagship.name} className="mt-4 aspect-[16/9] w-full" />
-          <div className="mt-6 grid gap-4 md:grid-cols-[1fr_0.8fr] md:items-end">
-            <h3 className="font-display text-3xl font-semibold tracking-[-0.04em] text-ink md:text-5xl">{flagship.name}</h3>
-            <p className="max-w-xl text-sm leading-relaxed text-muted">{flagship.heroStatement}</p>
-          </div>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {flagship.tech.map((t) => (
-              <span key={t} className="rounded-full border border-border px-3 py-1 text-xs text-muted">
-                {t}
-              </span>
-            ))}
-          </div>
-          <span className="mt-8 inline-flex items-center gap-1 text-sm font-medium text-ink">
-            View case study
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </span>
-        </motion.button>
+        <ProjectCard project={flagship} index={0} featured onSelect={setActive} />
 
-        {/* Rest — 2-col grid */}
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {rest.map((p, i) => (
-            <motion.button
-              type="button"
-              onClick={() => setActive(p)}
-              key={p.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group block w-full rounded-[1.5rem] border border-border bg-surface p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-emerald/50 hover:shadow-[0_24px_60px_rgba(0,0,0,0.1)]"
-            >
-              <span className="text-xs font-medium uppercase tracking-widest text-blue">{p.category}</span>
-              <ProjectVisual screenshot={p.screenshot} name={p.name} className="mt-3 aspect-[16/10] w-full" />
-              <h3 className="mt-3 font-display text-xl font-semibold text-ink">{p.name}</h3>
-              <p className="mt-3 text-sm text-muted">{p.heroStatement}</p>
-              <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-ink">
-                View case study
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </span>
-            </motion.button>
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          {rest.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index + 1} onSelect={setActive} />
           ))}
         </div>
 
         {/* Side projects */}
-        <div className="mt-20 border-t border-border pt-12">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">Experiments & builds</p>
-          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {sideProjects.map((sp) => (
-              <div key={sp.name} className="rounded-xl border border-border bg-surface p-4">
-                <p className="text-sm font-medium text-ink">{sp.name}</p>
-                <p className="mt-1 text-xs text-muted">{sp.category}</p>
-                <p className="mt-2 text-[11px] text-muted/70">{sp.tech}</p>
-              </div>
+        <div className="side-builds mt-20 border-t border-border pt-12">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <SectionKicker label="THE WORKBENCH" detail="SMALLER EXPERIMENTS" />
+              <h3 className="mt-3 font-display text-2xl font-semibold tracking-[-0.04em] text-ink">Curiosity, shipped.</h3>
+            </div>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.18em] text-muted md:block">Ideas still in orbit ↘</span>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {sideProjects.map((project, index) => (
+              <motion.div
+                key={project.name}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "0px 0px -5% 0px" }}
+                transition={{ duration: 0.45, delay: (index % 4) * 0.06 }}
+                className="side-build"
+              >
+                <span className="side-build__index">{String(index + 1).padStart(2, "0")}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-ink">{project.name}</p>
+                  <p className="mt-1 text-xs text-muted">{project.category}</p>
+                  <p className="mt-3 text-[11px] leading-relaxed text-muted/70">{project.tech}</p>
+                </div>
+                <span className="side-build__signal" aria-hidden="true" />
+              </motion.div>
             ))}
           </div>
         </div>

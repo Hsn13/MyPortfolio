@@ -18,19 +18,17 @@ export default function Home() {
       <ScrollChrome />
       <Nav />
       <Hero />
-      <ChapterBreak number="01" label="Proof / the signal" />
+      <ChapterBreak number="01" label="The signal" />
       <ImpactDashboard />
-      <ChapterBreak number="02" label="The person behind the work" />
-      <About />
-      <ChapterBreak number="03" label="Selected systems" />
+      <ChapterBreak number="02" label="Selected work" />
       <Projects />
-      <ChapterBreak number="04" label="The path that shaped it" />
+      <ChapterBreak number="03" label="Point of view" />
+      <About />
+      <ChapterBreak number="04" label="Experience & capabilities" />
       <Timeline />
-      <ChapterBreak number="05" label="Ownership beyond the interface" />
       <Leadership />
-      <ChapterBreak number="06" label="Tools, judgment, range" />
       <Skills />
-      <ChapterBreak number="07" label="A direct line to Hasan" />
+      <ChapterBreak number="05" label="Ask / connect" />
       <AIChat />
       <Contact />
       <CommandMenu />

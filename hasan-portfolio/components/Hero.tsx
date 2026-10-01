@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, MapPin, ArrowDownRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { profile } from "@/content/knowledge";
-import SystemsOrb from "@/components/SystemsOrb";
+import AIUniverse from "@/components/AIUniverse";
 
 export default function Hero() {
   const [time, setTime] = useState("");
+  const headlineParts = profile.headline.split(/(build)/i);
 
   useEffect(() => {
     const update = () =>
@@ -24,8 +25,10 @@ export default function Hero() {
         <svg className="absolute inset-0 h-full w-full opacity-[0.35]" preserveAspectRatio="xMidYMid slice">
           <defs>
             <radialGradient id="fade" cx="50%" cy="35%" r="60%">
-              <stop offset="0%" stopColor="#ff4f00" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#fffefb" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-blue)" stopOpacity="0.12" />
+              <stop offset="46%" stopColor="var(--color-emerald)" stopOpacity="0.08" />
+              <stop offset="78%" stopColor="var(--color-accent-white)" stopOpacity="0.04" />
+              <stop offset="100%" stopColor="var(--color-accent-white)" stopOpacity="0" />
             </radialGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#fade)" />
@@ -48,8 +51,9 @@ export default function Hero() {
               y1={`${l.y1}%`}
               x2={`${l.x2}%`}
               y2={`${l.y2}%`}
-              stroke="#c5c0b1"
+              stroke={i % 3 === 0 ? "var(--color-blue)" : i % 3 === 1 ? "var(--color-emerald)" : "var(--color-accent-white)"}
               strokeWidth="1"
+              opacity="0.36"
             />
           ))}
         </svg>
@@ -72,13 +76,19 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.05 }}
               className="text-balance max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[-0.07em] text-ink md:text-7xl lg:text-[6.5rem]"
             >
-              {profile.headline}
+              {headlineParts.map((part, index) =>
+                part.toLowerCase() === "build" ? (
+                  <span key={index} className="hero-headline__focus" data-text={part}>{part}</span>
+                ) : (
+                  part
+                )
+              )}
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.18 }} className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-muted md:text-xl">
               {profile.subhead}
             </motion.p>
           </div>
-          <SystemsOrb />
+          <AIUniverse />
         </div>
 
         <motion.div
@@ -89,7 +99,7 @@ export default function Hero() {
         >
           <a
             href="#projects"
-            className="group inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3.5 text-sm font-semibold text-[#201515] transition-transform hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 rounded-lg bg-emerald px-6 py-3.5 text-sm font-semibold text-emerald-deep transition-transform hover:-translate-y-0.5"
           >
             Explore Projects
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -99,12 +109,6 @@ export default function Hero() {
             className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface/60 px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-emerald hover:text-emerald"
           >
             Ask Hasan AI
-          </a>
-          <a
-            href="/HasanKhesro-CV.pdf"
-            className="inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted transition-colors hover:text-ink"
-          >
-            Download CV
           </a>
           <a href="#about" className="group inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted transition-colors hover:text-ink">
             Scroll to explore <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-y-0.5 group-hover:translate-x-0.5" />
@@ -116,14 +120,14 @@ export default function Hero() {
 }
 
 const NODES = [
-  { x: 12, y: 20, r: 2.5, color: "#ff4f00", dur: 5, delay: 0 },
-  { x: 28, y: 12, r: 1.8, color: "#36342e", dur: 6, delay: 0.4 },
-  { x: 46, y: 24, r: 2.2, color: "#ff4f00", dur: 7, delay: 0.8 },
-  { x: 63, y: 10, r: 1.6, color: "#36342e", dur: 5.5, delay: 1.2 },
-  { x: 78, y: 22, r: 2.4, color: "#ff4f00", dur: 6.5, delay: 0.2 },
-  { x: 88, y: 14, r: 1.8, color: "#36342e", dur: 8, delay: 0.6 },
-  { x: 20, y: 34, r: 1.6, color: "#36342e", dur: 7.5, delay: 1 },
-  { x: 55, y: 36, r: 2, color: "#ff4f00", dur: 6, delay: 1.4 },
+  { x: 12, y: 20, r: 2.5, color: "var(--color-emerald)", dur: 5, delay: 0 },
+  { x: 28, y: 12, r: 1.8, color: "var(--color-accent-white)", dur: 6, delay: 0.4 },
+  { x: 46, y: 24, r: 2.2, color: "var(--color-blue)", dur: 7, delay: 0.8 },
+  { x: 63, y: 10, r: 1.6, color: "var(--color-emerald)", dur: 5.5, delay: 1.2 },
+  { x: 78, y: 22, r: 2.4, color: "var(--color-accent-white)", dur: 6.5, delay: 0.2 },
+  { x: 88, y: 14, r: 1.8, color: "var(--color-blue)", dur: 8, delay: 0.6 },
+  { x: 20, y: 34, r: 1.6, color: "var(--color-blue)", dur: 7.5, delay: 1 },
+  { x: 55, y: 36, r: 2, color: "var(--color-emerald)", dur: 6, delay: 1.4 },
 ];
 
 const LINES = [

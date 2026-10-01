@@ -1,0 +1,83 @@
+name: Biweekly journal update
+
+on:
+  schedule:
+    - cron: "0 0 1,15 * *"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+  security-events: write
+
+jobs:
+  generate-and-validate:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: hasan-portfolio
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: hasan-portfolio/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@v4
+
+      - name: Generate sourced journal post
+        id: generate
+        run: npm run journal:update
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.1-flash-lite
+          LINKEDIN_WRITING_CONTEXT: ${{ secrets.LINKEDIN_WRITING_CONTEXT }}
+
+      - name: Validate generated journal post
+        run: |
+          npm run lint
+          npm run build
+
+      - name: Explain journal generation failure
+        if: failure() && steps.generate.outcome == 'failure'
+        run: |
+          {
+            echo "### Journal generation stopped"
+            echo
+            echo "No journal content was committed. Check the generation step for a Gemini model/API access issue, an exhausted project quota, or unavailable recent RSS sources."
+            echo "Confirm GEMINI_API_KEY belongs to the intended AI Studio project and that GEMINI_MODEL is enabled for it. Review project quotas: https://ai.google.dev/gemini-api/docs/rate-limits"
+            echo "After resolving the reported issue, rerun this workflow manually."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit generated post
+        if: success()
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        with:
+          commit_message: "biweekly journal auto-update"
+          branch: main
+          file_pattern: hasan-portfolio/content/posts.ts

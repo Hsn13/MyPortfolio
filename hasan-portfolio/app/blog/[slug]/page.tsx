@@ -53,6 +53,27 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               </p>
             ))}
           </div>
+          {post.sources && post.sources.length > 0 && (
+            <aside aria-labelledby="sources-heading" className="mt-12 border-t border-border pt-6">
+              <h2 id="sources-heading" className="text-xs font-semibold uppercase tracking-widest text-muted">
+                Sources
+              </h2>
+              <ul className="mt-4 space-y-2">
+                {post.sources.map((source) => (
+                  <li key={source.url}>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-blue underline decoration-border underline-offset-4 transition-colors hover:text-emerald"
+                    >
+                      {source.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
         </div>
       </article>
       <Contact />
